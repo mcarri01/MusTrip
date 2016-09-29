@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">MusTrip</string>
+    <string-array name="genres">
+        <item>Select Genre</item>
+        <item>Rock</item>
+        <item>Pop</item>
+        <item>Rap</item>
+        <item>EDM</item>
+    </string-array>
+
+</resources>
