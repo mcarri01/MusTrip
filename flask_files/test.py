@@ -2,6 +2,7 @@ import os
 import mustrip
 import unittest
 import tempfile
+from random import randint
 
 class mustripTestCase(unittest.TestCase):
 
@@ -15,11 +16,12 @@ class mustripTestCase(unittest.TestCase):
         os.unlink(mustrip.app.config['DATABASE'])
 
     def test_post(self):
-        req = self.app.post('/getPlaylist', data=dict(
-            lat='40',
-            lng='-118'
-        ))
-        assert "dfsTrue"
+        for i in range(50):
+            req = self.app.post('/getPlaylist', data=dict(
+                lat=str(randint(0, 100)),
+                lng=str(randint(0,100))
+            ))
+            self.assertEqual(req.status, '200 OK')
 
 if __name__ == '__main__':
     unittest.main()
