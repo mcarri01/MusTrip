@@ -28,6 +28,7 @@ def retrieve_playlist():
 	# max distance between 2 points on earth
 	min_distance = 20036
 	city_playlist = 0
+	city_name = ""
 	# Find min distance and save the playlist
 	for city in city_list:
 		city_coord = (float(city.get('lat')), float(city.get('lng')))
@@ -35,15 +36,20 @@ def retrieve_playlist():
 		if min_distance > distance:
 			min_distance = distance
 			city_playlist = city.get('distinctive_music')
+			city_name = city.get('city')
 
-	print(city_playlist)
+	base_uri = "https://api.spotify.com/v1/users/thesoundsofspotify/playlists/"
 	search_string = "/playlist/"
 	# Get index of ID
 	playlist_index = city_playlist.index(search_string)
 	playlist_id = city_playlist[playlist_index + len(search_string):]
 	# Return the playlist ID in URI form
-	print("https://api.spotify.com/v1/users/thesoundsofspotify/playlists/" + playlist_id)
-	return "https://api.spotify.com/v1/users/thesoundsofspotify/playlists/" + playlist_id
+	data = {}	
+	data['city'] = city_name
+	data['playlist'] = base_uri + playlist_id
+	print(base_uri + playlist_id)
+	json_data = json.dumps(data)
+	return json_data
 
 if __name__ == "__main__":
 
