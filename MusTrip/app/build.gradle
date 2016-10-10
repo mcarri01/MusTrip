@@ -33,17 +33,19 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
     // This library handles authentication and authorization
-    compile 'com.spotify.sdk:spotify-auth:1.0.0-beta13@aar'
+    
 
     // This library handles music playback
-    compile 'com.spotify.sdk:spotify-player:1.0.0-beta13@aar'
-
-    compile 'com.github.kaaes:spotify-web-api-android:0.4.1'
-
+    
+    
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    compile 'com.spotify.sdk:spotify-auth:1.0.0-beta13@aar'
+    compile 'com.spotify.sdk:spotify-player:1.0.0-beta13@aar'
+    compile 'com.github.kaaes:spotify-web-api-android:0.4.1'
     compile 'com.android.support:appcompat-v7:24.2.0'
-    testCompile 'junit:junit:4.12'
     compile 'com.google.android.gms:play-services-maps:9.4.0'
+    compile 'com.google.android.gms:play-services:9.4.0'
+    testCompile 'junit:junit:4.12'
 }

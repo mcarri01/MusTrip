@@ -42,10 +42,12 @@ public class MainActivity extends Activity implements
     // Can be any integer
     private static final int REQUEST_CODE = 1337;
     private boolean playing = false;
-    private Player mPlayer;
+    public Player mPlayer;
     private Button btnPlay;
     private Button btnBack;
     private Button btnForward;
+    private Button btnGoToMap;
+
     TextView txtResult;
 
     SpotifyApi api = new SpotifyApi();
@@ -96,6 +98,15 @@ public class MainActivity extends Activity implements
             }
         });
         spotify = api.getService();
+
+
+        btnGoToMap = (Button) findViewById(R.id.btnGoToMap);
+        btnGoToMap.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -118,8 +129,11 @@ public class MainActivity extends Activity implements
                         txtResult.setText(String.valueOf("Initialized"));
                         mPlayer.addConnectionStateCallback(MainActivity.this);
                         mPlayer.addPlayerNotificationCallback(MainActivity.this);
-                        mPlayer.play("spotify:user:spotify:playlist:6OSEPlP10MXOIrTbxr4bHC");
-                        playing = true;
+                        //mPlayer.play("spotify:user:spotify:playlist:6OSEPlP10MXOIrTbxr4bHC");
+                        mPlayer.play("spotify:user:thesoundsofspotify:playlist:3Ail1brqN8AJFrxL4FcTir");
+
+                        mPlayer.pause();
+                        playing = false;
                     }
 
                     @Override
@@ -198,7 +212,7 @@ public class MainActivity extends Activity implements
 
             @Override
             public void failure(RetrofitError error) {
-
+                Log.v("Trying to get album...", "fail");
             }
         });
         spotify.getArtist(mytrackuri, new Callback<Artist>() {

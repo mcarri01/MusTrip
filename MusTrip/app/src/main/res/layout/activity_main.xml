@@ -53,4 +53,14 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 
+    <Button
+        android:text="Go To Map"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvResult"
+        android:layout_alignRight="@+id/btnPlay"
+        android:layout_alignEnd="@+id/btnPlay"
+        android:layout_marginTop="91dp"
+        android:id="@+id/btnGoToMap" />
+
 </RelativeLayout>
