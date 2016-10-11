@@ -12,14 +12,27 @@ app = Flask(__name__)
 def index():
 	return "Welcome"
 
+#TODO implement getting playlist by both city as well
+@app.route("/playlistbycity", methods=['POST'])
+def get_by_city():
+	city = request.form["city"]
+	geolocator = Nominatim()
+	location = geolocator.geocode(city)
+	lat = location.latitude
+	lng = location.longitude
+	my_coord = (float(lat), float(lng))
+	return retrieve_playlist(my_coord)
+
+
 @app.route("/getPlaylist", methods=['POST'])
-def retrieve_playlist():
+def get_by_coord():
 	mylat = request.form["lat"]
 	mylng = request.form["lng"]
 	my_coord = (float(mylat), float(mylng))
-	coord = "" + mylat + "," + mylng
-	geolocator = Nominatim()
+	return retrieve_playlist(my_coord)
 
+def retrieve_playlist(my_coord):
+	
 	MONGODB_URI = "mongodb://mcarring:Keeker95@ds053156.mlab.com:53156/heroku_6132kr9d"
 	client = MongoClient(MONGODB_URI)
 	db = client.get_default_database()
@@ -29,7 +42,6 @@ def retrieve_playlist():
 	min_distance = 20036
 	city_playlist = 0
 	city_name = ""
-	# Find min distance and save the playlist
 	for city in city_list:
 		city_coord = (float(city.get('lat')), float(city.get('lng')))
 		distance = haversine(my_coord, city_coord)
@@ -47,7 +59,6 @@ def retrieve_playlist():
 	data = {}	
 	data['city'] = city_name
 	data['playlist'] = base_uri + playlist_id
-	print(base_uri + playlist_id)
 	json_data = json.dumps(data)
 	return json_data
 
