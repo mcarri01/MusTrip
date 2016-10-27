@@ -1,4 +1,5 @@
 import os
+import ast
 from flask import Flask
 from geopy.geocoders import Nominatim
 import json
@@ -12,7 +13,27 @@ app = Flask(__name__)
 def index():
 	return "Welcome"
 
-#TODO implement getting playlist by both city as well
+@app.route('/addPlaylist', methods=['POST'])
+def add_playlist():
+	user = request.form["user"]
+	playlist_id = request.form["playlist"]
+
+
+	return True
+
+@app.route('/addUser', methods=['POST'])
+def add_user():
+	db = db_login()
+	req_user = request.form["user"]
+	user_list = db.users.find()
+
+	for user in user_list:
+		if user['username'] == req_user:
+			return json.dumps({"status": "exists"})
+
+	db.users.insert_one({"username": req_user})
+	return json.dumps({"status": "success"})
+
 @app.route("/playlistbycity", methods=['POST'])
 def get_by_city():
 	city = request.form["city"]
@@ -32,16 +53,12 @@ def get_by_coord():
 	return retrieve_playlist(my_coord)
 
 def retrieve_playlist(my_coord):
-	
-	MONGODB_URI = "mongodb://mcarring:Keeker95@ds053156.mlab.com:53156/heroku_6132kr9d"
-	client = MongoClient(MONGODB_URI)
-	db = client.get_default_database()
-	collection = db.cityData
-	city_list = collection.find()
+	db = db_login()
+	city_list = db.cities.find()
 	# max distance between 2 points on earth
 	min_distance = 20036
 	city_playlist = 0
-	city_name = ""
+	city_name = "NOT FOUND"
 	for city in city_list:
 		city_coord = (float(city.get('lat')), float(city.get('lng')))
 		distance = haversine(my_coord, city_coord)
@@ -61,6 +78,11 @@ def retrieve_playlist(my_coord):
 	data['playlist'] = base_uri + playlist_id
 	json_data = json.dumps(data)
 	return json_data
+
+def db_login():
+	MONGODB_URI = "mongodb://mcarri01:mustrip@ds017896.mlab.com:17896/mustrip"
+	client = MongoClient(MONGODB_URI)
+	return client.mustrip
 
 if __name__ == "__main__":
 
