@@ -1,4 +1,4 @@
-package com.xeno.MusTrip;
+package com.xeno.mustrip;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.xeno.spotifysdktester", appContext.getPackageName());
+        assertEquals("com.xeno.mustrip", appContext.getPackageName());
     }
 }

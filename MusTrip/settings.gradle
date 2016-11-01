@@ -1,1 +1,1 @@
-include ':app', ':spotify-auth-1.0.0-beta13', ':spotify-player-1.0.0-beta13', ':spotify-web-api-android-0.4.1'
+include ':app', ':spotify-auth-1.0.0-beta12', ':spotify-player-1.0.0-beta12', ':spotify-auth-1.0.0-beta13', ':spotify-player-1.0.0-beta13', ':spotify-web-api-android-0.4.1'

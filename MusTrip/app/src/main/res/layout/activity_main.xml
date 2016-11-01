@@ -8,59 +8,40 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.xeno.MusTrip.MainActivity">
+    tools:context="com.xeno.mustrip.MainActivity">
 
     <TextView
-        android:text="Nothing To Show..."
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="89dp"
-        android:id="@+id/tvResult" />
-
-    <com.google.android.gms.maps.MapView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/btnPlay"
-        android:layout_marginTop="73dp"
-        android:id="@+id/mapView2" />
+        android:text="MusTrip"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textAlignment="center"
+        android:textSize="30sp" />
 
     <Button
-        android:text="Rewind"
+        android:text="Begin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/btnStart"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/btnBack" />
-
-
-    <Button
-        android:text="Forward"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:id="@+id/btnFoward" />
+        android:layout_alignParentEnd="true" />
 
-    <Button
-        android:text="Pause"
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/btnPlay"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
-
-    <Button
-        android:text="Go To Map"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvResult"
-        android:layout_alignRight="@+id/btnPlay"
-        android:layout_alignEnd="@+id/btnPlay"
-        android:layout_marginTop="91dp"
-        android:id="@+id/btnGoToMap" />
-
+        android:id="@+id/txtInfo"
+        android:text="Welome to MusTrip. Click Begin to start your road trip. "
+        android:textSize="24sp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:textAlignment="center" />
 </RelativeLayout>
