@@ -35,6 +35,24 @@ class mustripTestCase(unittest.TestCase):
         ))
         data = json.loads(res.get_data(as_text=True))
         self.assertEqual(data['city'], "Boston")
+        res = self.APP.post('/playlistbycity', data=dict(
+            city="Fairfax",
+        ))
+        # Checks for nearby city, not exact one
+        data = json.loads(res.get_data(as_text=True))
+        self.assertEqual(data['city'], "Washington")
+        # Checks for lowercase
+        res = self.APP.post('/playlistbycity', data=dict(
+            city="boston",
+        ))
+        data = json.loads(res.get_data(as_text=True))
+        self.assertEqual(data['city'], "Boston")
+        # Checks for uppercase
+        res = self.APP.post('/playlistbycity', data=dict(
+            city="BOSTON",
+        ))
+        data = json.loads(res.get_data(as_text=True))
+        self.assertEqual(data['city'], "Boston")
 
     
     
