@@ -11,8 +11,8 @@ from pymongo import MongoClient
 
 
 
-app = Flask(__name__)
-@app.route('/')
+APP = Flask(__name__)
+@APP.route('/')
 def index():
     """ Temp index """
     return "Welcome"
@@ -20,7 +20,7 @@ def index():
 ############################################################
 # Add to database functions
 ############################################################
-@app.route('/addUser', methods=['POST'])
+@APP.route('/addUser', methods=['POST'])
 def add_user():
     """Adds a new user (if does not exist) to the database"""
     _db = db_login()
@@ -33,7 +33,7 @@ def add_user():
         return json.dumps({"status": "User already exists"})
 
 
-@app.route("/addTrip", methods=["POST"])
+@APP.route("/addTrip", methods=["POST"])
 def add_trip():
     """Adds a new trip (if does not exist) to the database"""
     _db = db_login()
@@ -48,7 +48,7 @@ def add_trip():
         return json.dumps({"status": "Trip already exists"})
 
 
-@app.route('/addTrack', methods=['POST'])
+@APP.route('/addTrack', methods=['POST'])
 def add_track():
     """Adds a new track to a particular track playlist"""
     _db = db_login()
@@ -63,7 +63,7 @@ def add_track():
 ############################################################
 # Retrieve from database functions
 ############################################################
-@app.route("/getUser", methods=["POST"])
+@APP.route("/getUser", methods=["POST"])
 def get_user():
     """Retrieves a users information from the database"""
     _db = db_login()
@@ -72,7 +72,7 @@ def get_user():
     return dumps(user)
 
 
-@app.route("/getTrip", methods=["POST"])
+@APP.route("/getTrip", methods=["POST"])
 def get_trip():
     """Retrieves trip information for a particular user and trip ID"""
     _db = db_login()
@@ -81,7 +81,7 @@ def get_trip():
     trip = _db.users.find_one({"username": req_user, "trips.name": trip_id})
     return dumps(trip)
 
-@app.route("/getPlaylists", methods=["POST"])
+@APP.route("/getPlaylists", methods=["POST"])
 def get_tracks():
     """Retrieves list of tracks for a given trip ID"""
     _db = db_login()
@@ -95,7 +95,7 @@ def get_tracks():
 ############################################################
 # Retrieving city playlists by city name or coordinates
 ############################################################
-@app.route("/playlistbycity", methods=['POST'])
+@APP.route("/playlistbycity", methods=['POST'])
 def get_by_city():
     """Returns playlist of popular music for given city name"""
     city = request.form["city"]
@@ -107,7 +107,7 @@ def get_by_city():
     return retrieve_playlist(my_coord)
 
 
-@app.route("/getPlaylist", methods=['POST'])
+@APP.route("/getPlaylist", methods=['POST'])
 def get_by_coord():
     """Returns playlist of popular music for given lat/lng """
     mylat = request.form["lat"]
@@ -136,21 +136,21 @@ def retrieve_playlist(my_coord):
             city_playlist = city.get('distinctive_music')
             city_name = city.get('city')
 
-    base_uri = "https://api.spotify.com/v1/users/thesoundsofspotify/playlists/"
     search_string = "/playlist/"
     # Get index of ID
     playlist_index = city_playlist.index(search_string)
     playlist_id = city_playlist[playlist_index + len(search_string):]
     # Return the playlist ID in URI form
     data = {}
+
     data['city'] = city_name
-    data['playlist'] = base_uri + playlist_id
+    data['playlist'] = playlist_id
     json_data = json.dumps(data)
     return json_data
 
 def db_login():
-    """Helper function to log into app MongoDB """
-    _mongouri= "mongodb://mcarri01:mustrip@ds017896.mlab.com:17896/mustrip"
+    """Helper function to log into APP MongoDB """
+    _mongouri = "mongodb://mcarri01:mustrip@ds017896.mlab.com:17896/mustrip"
     client = MongoClient(_mongouri)
     return client.mustrip
 
@@ -166,4 +166,4 @@ def search_users(_db, req_user):
 if __name__ == "__main__":
 
     PORT = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=PORT)
+    APP.run(host='0.0.0.0', port=PORT)
