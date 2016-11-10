@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="#C1DAD6"
+    android:background="#F0F4C3"
     tools:context="com.xeno.MusTrip.MapPlayer">
 
 
@@ -43,19 +43,22 @@
         android:icon="@mipmap/ic_play"
         android:onClick="onSearch"
         android:background="#ACD1E9"
-        android:layout_above="@+id/city"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/city"
-        android:layout_alignEnd="@+id/city" />
+        android:layout_below="@+id/textView9"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignLeft="@+id/btnForward"
+        android:layout_alignStart="@+id/btnForward" />
 
     <ListView
         android:id="@+id/lv"
         android:layout_width="wrap_content"
-        android:layout_height="240dp"
+        android:layout_height="300dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_above="@+id/btnRewind">
+        android:layout_above="@+id/btnRewind"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/city">
 
     </ListView>
 
@@ -64,18 +67,18 @@
         android:id="@+id/city"
         android:layout_height="50dp"
         android:textAlignment="center"
-        android:layout_above="@+id/lv"
+        android:layout_below="@+id/input"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/lv"
-        android:layout_alignEnd="@+id/lv" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/input"
         android:singleLine="true"
-        android:layout_above="@+id/getTracks"
+        android:layout_below="@+id/textView4"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
