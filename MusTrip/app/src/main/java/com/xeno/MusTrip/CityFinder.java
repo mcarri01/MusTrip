@@ -149,11 +149,9 @@ public class CityFinder extends Activity implements
     private String CurrTrack;
     private String CurrLoc;
     private Bitmap CurrImage;
-    private ArrayList<Song> songQueue;
+   // private ArrayList<Song> songQueue;
     private ImageView play;
-    private int requestNum = 1;
     TextView txtResult;
-    private int fuck = 0;
     SpotifyApi api = new SpotifyApi();
     SpotifyService spotify = api.getService();
 
@@ -275,7 +273,6 @@ public class CityFinder extends Activity implements
     public void onPlaybackEvent(PlayerNotificationCallback.EventType eventType, PlayerState playerState) {
 
         Log.d("MainActivity", "Playback event received: " + eventType.name());
-        fuck++;
         String uri = playerState.trackUri;
         String[] elems = uri.split(":");
 
@@ -288,23 +285,12 @@ public class CityFinder extends Activity implements
             }
         }
         if (eventType == EventType.TRACK_CHANGED) {
-//            int requestCheck = 0;
-//            if ((requestNum & 1) == 0) {
-//                requestCheck = 5;
-//            }
-//            else {
-//                requestCheck = 3;
-//            }
-//            if (fuck == requestCheck) {
+
                 spotify.getTrack(mytrackuri, new Callback<Track>() {
                     @Override
                     public void success(Track track, retrofit.client.Response response) {
-                        fuck = 0;
                         CurrTrack = track.name;
-
                         getImage();
-
-
                     }
                     @Override
                     public void failure(RetrofitError error) {
@@ -312,22 +298,10 @@ public class CityFinder extends Activity implements
                     }
                 });
             }
-//            else {
-//                fuck++;
-//            }
-
-
-
-
     }
 
     public void addSong(Bitmap cover, String name, String place) {
         Song s = new Song(cover, name, place);
-
-//        if((!((MyApplication) this.getApplication()).containsSong(s))) {
-//            ((MyApplication) this.getApplication()).songQueue.add(0, s);
-//
-//        }
         ((MyApplication) this.getApplication()).songQueue.add(0, s);
     }
 
