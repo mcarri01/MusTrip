@@ -1,6 +1,7 @@
 package com.xeno.MusTrip;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
@@ -53,9 +54,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             checkLocationPermission();
         }
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        ProgressDialog progress;
+        progress = ProgressDialog.show(this, "One moment", "Retrieving location", true);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+                .findFragmentById(R.id.getTracks);
         mapFragment.getMapAsync(this);
+        progress.dismiss();
         Log.v("**********","Finished onCreate");
         btn = (Button) findViewById(R.id.update);
         btn.setOnClickListener(new View.OnClickListener() {
@@ -126,8 +130,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onConnected(Bundle bundle) {
 
         mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(10);
-        mLocationRequest.setFastestInterval(10);
+        mLocationRequest.setInterval(1);
+        mLocationRequest.setFastestInterval(1);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
