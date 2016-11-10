@@ -1,4 +1,4 @@
-package com.xeno.mustrip;
+package com.xeno.MusTrip;
 
 import android.app.Application;
 import android.location.Location;
@@ -10,6 +10,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.xeno.MusTrip.Song;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by davidbernstein on 10/11/16.
+ * Created by david bernstein on 10/11/16.
  */
 
 
@@ -33,7 +34,8 @@ public class MyApplication extends Application {
     public String currPlace = "";
     public boolean changed = false;
     public Location currLocation;
-    public ArrayList<Song> songQueue = new ArrayList<Song>();
+    public ArrayList<Song> songQueue = new ArrayList<>();
+
 
     public boolean containsSong(Song s) {
         String currName = s.getName();
@@ -46,13 +48,13 @@ public class MyApplication extends Application {
     }
 
     public void changeLocation(final Location location) {
-        final Location loc = location;
+        //final Location loc = location;
         currLocation = location;
         return;
     }
 
     public void changeLocation2(final Location location){
-        final Location loc = location;
+        //final Location loc = location;
         currLocation = location;
         final String lat = String.valueOf(location.getLatitude());
         final String lng = String.valueOf(location.getLongitude());
@@ -84,7 +86,7 @@ public class MyApplication extends Application {
                 }){
             @Override
             protected Map<String,String> getParams(){
-                Map<String,String> params = new HashMap<String, String>();
+                Map<String,String> params = new HashMap<>();
                 params.put("lat",lat);
                 params.put("lng",lng);
                 return params;

@@ -1,10 +1,11 @@
 // TutorialApp
 // Created by Spotify on 25/02/14.
 // Copyright (c) 2014 Spotify. All rights reserved.
-package com.xeno.mustrip;
+package com.xeno.MusTrip;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
@@ -26,6 +27,7 @@ import com.spotify.sdk.android.player.PlayerNotificationCallback;
 import com.spotify.sdk.android.player.PlayerState;
 import com.spotify.sdk.android.player.Spotify;
 
+
 import java.util.ArrayList;
 
 import kaaes.spotify.webapi.android.SpotifyApi;
@@ -40,7 +42,7 @@ public class MapPlayer extends Activity implements
         PlayerNotificationCallback, ConnectionStateCallback {
 
     // TODO: Replace with your client ID
-    private static final String CLIENT_ID = "f1d15f994d784e85b6c78a6ed3ea62f0";
+    private static final String CLIENT_ID = "c3bc81a134e647d2bea359ec1db1f87d";
     // TODO: Replace with your redirect URI
     private static final String REDIRECT_URI = "spotifytest://callback";
 
@@ -74,9 +76,10 @@ public class MapPlayer extends Activity implements
         setContentView(R.layout.activity_map_player);
         btnMap = (Button) findViewById(R.id.btnMap);
         lv = (ListView) findViewById(R.id.lv);
-        txtTemp = (TextView) findViewById(R.id.txtTemp);
 
-        txtResult = (TextView) findViewById(R.id.txtResult);
+
+
+        txtResult = (TextView) findViewById(R.id.city);
         AuthenticationRequest.Builder builder =
                 new AuthenticationRequest.Builder(CLIENT_ID, AuthenticationResponse.Type.TOKEN, REDIRECT_URI);
         builder.setScopes(new String[]{"user-read-private", "streaming"});
@@ -120,7 +123,7 @@ public class MapPlayer extends Activity implements
         btnMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MapPlayer.this, MapsActivity.class);
+                Intent intent = new Intent(MapPlayer.this, com.xeno.MusTrip.MapsActivity.class);
 
                 startActivity(intent);
             }
@@ -149,10 +152,10 @@ public class MapPlayer extends Activity implements
 //        String toSet = "got: " + got;
 //        txtTemp.setText(toSet);
 
-        if(((MyApplication) this.getApplication()).changed) {
-            ((MyApplication) this.getApplication()).changed = false;
+        if(((com.xeno.MusTrip.MyApplication) this.getApplication()).changed) {
+            ((com.xeno.MusTrip.MyApplication) this.getApplication()).changed = false;
 
-            mPlayer.play(((MyApplication) this.getApplication()).currUri);
+            mPlayer.play(((com.xeno.MusTrip.MyApplication) this.getApplication()).currUri);
 
         }
         updateView();
@@ -182,7 +185,7 @@ public class MapPlayer extends Activity implements
                         public void onInitialized(Player player) {
                             //            txtResult.setText(String.valueOf("Initialized"));
                             try {
-
+                                // TODO cause it to play based off retrieved url from location
                                 mPlayer.addConnectionStateCallback(MapPlayer.this);
                                 mPlayer.addPlayerNotificationCallback(MapPlayer.this);
                                 //mPlayer.play("spotify:user:spotify:playlist:6OSEPlP10MXOIrTbxr4bHC");
@@ -257,7 +260,7 @@ public class MapPlayer extends Activity implements
         final String currentText = txtResult.getText().toString();
         final String u = mytrackuri;
 
-        final String place = ((MyApplication) this.getApplication()).currPlace;
+        final String place = ((com.xeno.MusTrip.MyApplication) this.getApplication()).currPlace;
 
         spotify.getTrack(mytrackuri, new Callback<Track>() {
             @Override
@@ -268,9 +271,9 @@ public class MapPlayer extends Activity implements
                 }
                 if(!(new String(toSet).equals(currentText))) {
                     txtResult.setText(toSet);
-                    txtResult.setText(Html.fromHtml("Currently Playing from <b>" + place + "</b> <br><em>" + track.name + "</em>"));
+                    txtResult.setText("Currently Playing from " + place + "\n" + track.name);
 
-                    addSong(u,track.name);
+                   // addSong(,track.name, " ");
                 }
 
             }
@@ -300,9 +303,8 @@ public class MapPlayer extends Activity implements
 
     }
 
-    public void addSong(String uri, String name) {
-        Song s = new Song();
-        s.setName(name);
+    public void addSong(Bitmap cover, String name, String place) {
+        Song s = new Song(cover, name, place);
         s.setPlace(((MyApplication) this.getApplication()).currPlace);
         if((!((MyApplication) this.getApplication()).containsSong(s))) {
             ((MyApplication) this.getApplication()).songQueue.add(s);
@@ -329,7 +331,7 @@ public class MapPlayer extends Activity implements
     }
 
     public void updateView() {
-        ArrayList<String> arrlist=new ArrayList<String>();
+        ArrayList<String> arrlist=new ArrayList<>();
 
         final ArrayList q = ((MyApplication) this.getApplication()).songQueue;
 
@@ -339,7 +341,7 @@ public class MapPlayer extends Activity implements
             arrlist.add(q.get(i).toString());
         }
         //txtTemp.setText(temp);
-        lv.setAdapter(new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1 , arrlist));
+        lv.setAdapter(new ArrayAdapter<>(this,android.R.layout.simple_list_item_1 , arrlist));
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             // argument position gives the index of item which is clicked

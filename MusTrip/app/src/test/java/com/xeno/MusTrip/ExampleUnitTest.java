@@ -1,4 +1,4 @@
-package com.xeno.mustrip;
+package com.xeno.MusTrip;
 
 import org.junit.Test;
 

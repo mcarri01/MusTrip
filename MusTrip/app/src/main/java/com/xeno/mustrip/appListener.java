@@ -1,7 +1,7 @@
-package com.xeno.mustrip;
+package com.xeno.MusTrip;
 
 /**
- * Created by davidbernstein on 10/11/16.
+ * Created by david bernstein on 10/11/16.
  */
 
 public interface appListener {

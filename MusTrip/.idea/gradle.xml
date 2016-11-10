@@ -16,7 +16,17 @@
             <option value="$PROJECT_DIR$/spotify-web-api-android-0.4.1" />
           </set>
         </option>
-        <option name="resolveModulePerSourceSet" value="false" />
+        <option name="myModules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/spotify-auth-1.0.0-beta12" />
+            <option value="$PROJECT_DIR$/spotify-auth-1.0.0-beta13" />
+            <option value="$PROJECT_DIR$/spotify-player-1.0.0-beta12" />
+            <option value="$PROJECT_DIR$/spotify-player-1.0.0-beta13" />
+            <option value="$PROJECT_DIR$/spotify-web-api-android-0.4.1" />
+          </set>
+        </option>
       </GradleProjectSettings>
     </option>
   </component>

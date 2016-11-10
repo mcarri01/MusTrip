@@ -1,6 +1,8 @@
-package com.xeno.mustrip;
+package com.xeno.MusTrip;
 
+import android.graphics.Bitmap;
 import android.util.Log;
+import android.widget.ImageView;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -17,43 +19,36 @@ import java.util.Map;
 import javax.net.ssl.HttpsURLConnection;
 
 /**
- * Created by davidbernstein on 10/11/16.
+ * Created by david bernstein on 10/11/16.
  */
 
 public class Song {
-    private String uri;
+    private Bitmap cover;
     private String name;
     private double lat;
     private double lng;
     private String place;
 
     public String getName() {return name;}
-    public void setUri(String s) {uri = s;};
+    public void setCover(Bitmap b) {cover = b;};
     public void setName(String s) {name = s;};
     public void setLocation(double la, double ln) {lat = la; lng = ln; place = findPlace(la,ln);}
 
     // Constructor
-    public Song(String u, String s, double la, double ln, String p) {
-        setUri(u);
-        setName(s);
-        setLocation(la,ln);
-        place = p;
-    }
-
-    public Song() {
-        setUri("");
-        setName("");
+    public Song(Bitmap b, String name, String city) {
+        setCover(b);
+        setName(name);
         setLocation(0,0);
-        place = "";
+        place = city;
     }
 
-    public String getUri() {return uri;}
+    public Bitmap getCover() {return cover;}
 
     @Override
     public String toString() {
-        String p = "";
+        String p;
         if(place.equals("")) {
-            p = "Boston";
+            p = "";
         } else {
             p = place;
         }
@@ -61,7 +56,6 @@ public class Song {
     }
 
     public String getLocation(){return "[" + lat + "," + lng + "]";}
-
     private String findPlace(double lat, double lng) {
 
         HashMap<String, String> postDataParams = new HashMap<>( );

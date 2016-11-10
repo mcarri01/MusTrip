@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.xeno.mustrip.MapPlayer">
+    tools:context="com.xeno.MusTrip.MapPlayer">
 
 
     <GridLayout
@@ -68,29 +68,22 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:id="@+id/txtTemp"
-        android:text="Temp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
     <ListView
         android:id="@+id/lv"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_above="@+id/btnMap"
-        android:layout_below="@+id/txtResult">
+        android:layout_width="500dp"
+        android:layout_height="200dp"
+
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/city"
+        android:layout_alignStart="@+id/city"
+        android:layout_marginLeft="128dp"
+        android:layout_marginStart="128dp">
 
     </ListView>
 
     <TextView
         android:layout_width="wrap_content"
-        android:id="@+id/txtResult"
+        android:id="@+id/city"
         android:layout_below="@+id/gridLayout"
         android:layout_alignLeft="@+id/gridLayout"
         android:layout_alignStart="@+id/gridLayout"

@@ -1,10 +1,10 @@
-package com.xeno.mustrip;
-import com.xeno.mustrip.Song;
+package com.xeno.MusTrip;
+import com.xeno.MusTrip.Song;
 
 import java.util.ArrayList;
 
 /**
- * Created by davidbernstein on 10/11/16.
+ * Created by david bernstein on 10/11/16.
  */
 
 public class SongQueue {
@@ -19,12 +19,6 @@ public class SongQueue {
         currIndex = 0;
     }
 
-    // Getters and setters
-    public int getNumSongs() {return numSongs;}
-    public void addSong(Song s) {
-        songQueue.add(s);
-        numSongs++;
-    }
 
     public Song getCurrSong() {
         return (Song) (songQueue.get(currIndex));
