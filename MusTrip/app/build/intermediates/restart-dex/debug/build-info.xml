@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<instant-run
+    abi="armeabi-v7a,armeabi"
+    api-level="23"
+    density="xhdpi"
+    format="7"
+    timestamp="68462330470895"
+    token="3025592820283966865" >
+
+    <task
+        name="javac"
+        duration="1082" />
+    <task
+        name="instant-run-dex"
+        duration="0" />
+    <task
+        name="instant-run-transform"
+        duration="89" />
+    <task
+        name="verifier"
+        duration="22" />
+
+    <artifact
+        location="C:\Users\mcarr\OneDrive\Documents\comp150\mustrip\frontend\comp150\MusTrip\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_3\classes.dex"
+        type="DEX" />
+
+    <build timestamp="65644096648766" >
+        <artifact
+            location="C:\Users\mcarr\OneDrive\Documents\comp150\mustrip\frontend\comp150\MusTrip\app\build\outputs\apk\app-debug.apk"
+            type="MAIN" />
+    </build>
+    <build timestamp="66532836260703" >
+        <artifact
+            location="C:\Users\mcarr\OneDrive\Documents\comp150\mustrip\frontend\comp150\MusTrip\app\build\intermediates\res\resources-debug.ap_"
+            type="RESOURCES" />
+        <artifact
+            location="C:\Users\mcarr\OneDrive\Documents\comp150\mustrip\frontend\comp150\MusTrip\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_2\classes.dex"
+            type="DEX" />
+        <artifact
+            location="C:\Users\mcarr\OneDrive\Documents\comp150\mustrip\frontend\comp150\MusTrip\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_4\classes.dex"
+            type="DEX" />
+        <artifact
+            location="C:\Users\mcarr\OneDrive\Documents\comp150\mustrip\frontend\comp150\MusTrip\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_0\classes.dex"
+            type="DEX" />
+    </build>
+    <build timestamp="68462330470895" >
+        <artifact
+            location="C:\Users\mcarr\OneDrive\Documents\comp150\mustrip\frontend\comp150\MusTrip\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_3\classes.dex"
+            type="DEX" />
+    </build>
+
+</instant-run>

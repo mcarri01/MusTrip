@@ -1,0 +1,22 @@
+[
+    {
+        "merged": "C:\\Users\\mcarr\\OneDrive\\Documents\\comp150\\mustrip\\frontend\\comp150\\MusTrip\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-mdpi-v4\\find.png",
+        "source": "C:\\Users\\mcarr\\OneDrive\\Documents\\comp150\\mustrip\\frontend\\comp150\\MusTrip\\app\\src\\main\\res\\mipmap-mdpi\\find.png"
+    },
+    {
+        "merged": "C:\\Users\\mcarr\\OneDrive\\Documents\\comp150\\mustrip\\frontend\\comp150\\MusTrip\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-mdpi-v4\\ic_pause.png",
+        "source": "C:\\Users\\mcarr\\OneDrive\\Documents\\comp150\\mustrip\\frontend\\comp150\\MusTrip\\app\\src\\main\\res\\mipmap-mdpi\\ic_pause.png"
+    },
+    {
+        "merged": "C:\\Users\\mcarr\\OneDrive\\Documents\\comp150\\mustrip\\frontend\\comp150\\MusTrip\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-mdpi-v4\\ic_launcher.png",
+        "source": "C:\\Users\\mcarr\\OneDrive\\Documents\\comp150\\mustrip\\frontend\\comp150\\MusTrip\\app\\src\\main\\res\\mipmap-mdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\mcarr\\OneDrive\\Documents\\comp150\\mustrip\\frontend\\comp150\\MusTrip\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-mdpi-v4\\ic_play.png",
+        "source": "C:\\Users\\mcarr\\OneDrive\\Documents\\comp150\\mustrip\\frontend\\comp150\\MusTrip\\app\\src\\main\\res\\mipmap-mdpi\\ic_play.png"
+    },
+    {
+        "merged": "C:\\Users\\mcarr\\OneDrive\\Documents\\comp150\\mustrip\\frontend\\comp150\\MusTrip\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-mdpi-v4\\trip.png",
+        "source": "C:\\Users\\mcarr\\OneDrive\\Documents\\comp150\\mustrip\\frontend\\comp150\\MusTrip\\app\\src\\main\\res\\mipmap-mdpi\\trip.png"
+    }
+]
