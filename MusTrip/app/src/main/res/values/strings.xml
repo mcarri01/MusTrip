@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">MusTrip</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="google_maps_key">AIzaSyA2zmhhHQp9QrgEV8-lLF5f2mRQ1qs_24k</string>
+    <string name="key">AIzaSyA2zmhhHQp9QrgEV8-lLF5f2mRQ1qs_24k</string>
+    <string name="about">MusTrip is a tool for exploring the music of the world and for helping
+        tie your own adventures with music. It uses Spotify\'s own resources to find uniquely distinct
+        music to a particular city or to the nearest city from your geolocation. Because it uses
+        Spotify\'s internal data on track play distributions, it supports up to 543 cities currently
+        worldwide, mostly in North America and Europe. For full functionality, it requires your
+        login to Spotify.
+    </string>
+    <string name="modes">
+        This app supports both our "Trip" experience and its "Music Finder". The Trip mode allows
+        a user to find distinctly popular music around their geolocation, and creates a streaming
+        playlist. The user can also examine the map and update their position to see if they are
+        closer to a different city than they originally started in. \n
+        The Music Finder mode allows you to type in a city name and playlists of songs that are
+        distinctly unique to that city. You can hop between cities, whether it be Paris, Lisbon,
+        or even San Franciso and Boston. Songs will indicate where they are "from" and just like before
+        the user can interact with the playlist.
+    </string>
+    <string name="City">
+        Music Search
+    </string>
+    <string name="CityDescrip">
+        Type in a city name below
+        (if there are multiple cities with the same name, also throw in the country name...) and the
+        queue will load up songs popular in that area. Enjoy!
+    </string>
+</resources>
