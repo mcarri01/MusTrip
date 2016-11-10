@@ -3,358 +3,300 @@
 // Copyright (c) 2014 Spotify. All rights reserved.
 package com.xeno.MusTrip;
 
-import android.app.Activity;
+import android.Manifest;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
-import android.text.Html;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationRequest;
 import com.spotify.sdk.android.authentication.AuthenticationResponse;
 import com.spotify.sdk.android.player.Config;
-import com.spotify.sdk.android.player.ConnectionStateCallback;
 import com.spotify.sdk.android.player.Player;
-import com.spotify.sdk.android.player.PlayerNotificationCallback;
-import com.spotify.sdk.android.player.PlayerState;
 import com.spotify.sdk.android.player.Spotify;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import java.util.HashMap;
+import java.util.Map;
 
-import java.util.ArrayList;
-
-import kaaes.spotify.webapi.android.SpotifyApi;
-import kaaes.spotify.webapi.android.SpotifyService;
-import kaaes.spotify.webapi.android.models.Album;
-import kaaes.spotify.webapi.android.models.Track;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
-
-public class MapPlayer extends Activity implements
-        PlayerNotificationCallback, ConnectionStateCallback {
-
-    // TODO: Replace with your client ID
-    private static final String CLIENT_ID = "c3bc81a134e647d2bea359ec1db1f87d";
-    // TODO: Replace with your redirect URI
-    private static final String REDIRECT_URI = "spotifytest://callback";
-
-    // Request code that will be passed together with authentication result to the onAuthenticationResult callback
-    // Can be any integer
+public class MapPlayer extends CityFinder implements GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener {
+    private Location myLocation;
+    private String CurrLoc;
+    private String CurrTrack;
+    private ListView lv;
+    private ImageView btnPlay;
+    private ImageView btnBack;
+    private ImageView btnForward;
     private static final int REQUEST_CODE = 1337;
     private boolean playing = false;
     public Player mPlayer;
-    private Button btnPlay;
-    private Button btnBack;
-    private Button btnForward;
-    private Button btnGoToMap;
-    private boolean loaded;
-    private Button btnMap;
-    private Boolean started = false;
-    TextView txtResult;
+    private static final String CLIENT_ID = "c3bc81a134e647d2bea359ec1db1f87d";
+    private static final String REDIRECT_URI = "spotifytest://callback";
+    private ImageView play;
+    public Location mLastLocation;
+    private GoogleApiClient mGoogleApiClient;
 
-    SpotifyApi api = new SpotifyApi();
-    SpotifyService spotify = api.getService();
-
-    private int counter = 0;
-
-
-    private ListView lv;
-    TextView txtTemp;
-
-
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_player);
-        btnMap = (Button) findViewById(R.id.btnMap);
         lv = (ListView) findViewById(R.id.lv);
-
-
-
+        play = (ImageView) findViewById(R.id.btnPlay);
+        if (checkPlayServices()) {
+            buildGoogleApiClient();
+            mGoogleApiClient.connect();
+            retrieveLocation();
+        }
         txtResult = (TextView) findViewById(R.id.city);
+
         AuthenticationRequest.Builder builder =
                 new AuthenticationRequest.Builder(CLIENT_ID, AuthenticationResponse.Type.TOKEN, REDIRECT_URI);
         builder.setScopes(new String[]{"user-read-private", "streaming"});
-        AuthenticationRequest request = builder.build();
+        final AuthenticationRequest request = builder.build();
         AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);
 
-        btnPlay = (Button) findViewById(R.id.btnPlay);
 
+        btnPlay = (ImageView) findViewById(R.id.btnPlay);
         btnPlay.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if(playing) {
                     mPlayer.pause();
-                    btnPlay.setText("Play");
+                    play.setImageResource(R.drawable.pause);
+
                 } else {
                     mPlayer.resume();
-                    btnPlay.setText("Pause");
+                    play.setImageResource(R.drawable.play);
+
                 }
                 playing = !playing;
             }
         });
 
-        btnForward = (Button) findViewById(R.id.btnForward);
+        btnForward = (ImageView) findViewById(R.id.btnForward);
         btnForward.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 mPlayer.skipToNext();
-                if(!playing) {mPlayer.pause();}
+                //if(!playing) {mPlayer.pause();}
 
             }
         });
 
-        btnBack = (Button) findViewById(R.id.btnRewind);
+        btnBack = (ImageView) findViewById(R.id.btnRewind);
         btnBack.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 mPlayer.skipToPrevious();
-                if(!playing){mPlayer.pause();}
+                //if(!playing){mPlayer.pause();}
 
             }
         });
-
-
-        btnMap.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MapPlayer.this, com.xeno.MusTrip.MapsActivity.class);
-
-                startActivity(intent);
-            }
-        });
-
-
-
-        txtTemp.setText(String.valueOf(++counter));
-
-
-
     }
-
-    public Player getPlayer() {
-        return mPlayer;
-    }
-
-    public void onResume() {
-        super.onResume();  // Always call the superclass method first
-        //txtTemp.setText(String.valueOf(++counter));
-//        Intent intent = getIntent();
-//        int lng = intent.getIntExtra("lng",0);
-//        int lat = intent.getIntExtra("lat",0);
-//        String toSet = "lat: " + lat + "\nlng: " + lng;
-//        int got = ((MyApplication) this.getApplication()).getX();
-//        String toSet = "got: " + got;
-//        txtTemp.setText(toSet);
-
-        if(((com.xeno.MusTrip.MyApplication) this.getApplication()).changed) {
-            ((com.xeno.MusTrip.MyApplication) this.getApplication()).changed = false;
-
-            mPlayer.play(((com.xeno.MusTrip.MyApplication) this.getApplication()).currUri);
-
-        }
-        updateView();
-
-
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
 
         try {
-            txtTemp.setText(String.valueOf(++counter));
-            super.onActivityResult(requestCode, resultCode, intent);
-
-
             // Check if result comes from the correct activity
             if (requestCode == REQUEST_CODE) {
-                //txtResult.setText(String.valueOf(REQUEST_CODE));
                 AuthenticationResponse response = AuthenticationClient.getResponse(resultCode, intent);
                 if (response.getType() == AuthenticationResponse.Type.TOKEN) {
-
-                    //      txtResult.setText(String.valueOf("done5"));
-
                     Config playerConfig = new Config(this, response.getAccessToken(), CLIENT_ID);
                     mPlayer = Spotify.getPlayer(playerConfig, this, new Player.InitializationObserver() {
                         @Override
                         public void onInitialized(Player player) {
-                            //            txtResult.setText(String.valueOf("Initialized"));
                             try {
-                                // TODO cause it to play based off retrieved url from location
                                 mPlayer.addConnectionStateCallback(MapPlayer.this);
                                 mPlayer.addPlayerNotificationCallback(MapPlayer.this);
-                                //mPlayer.play("spotify:user:spotify:playlist:6OSEPlP10MXOIrTbxr4bHC");
-                                mPlayer.play("spotify:user:thesoundsofspotify:playlist:3Ail1brqN8AJFrxL4FcTir");
-                                mPlayer.pause();
-                                updateView();
-                                //          mPlayer.pause();
-                                //        playing = false;
+
                             } catch (Error e) {
                                 Log.v("error",e.toString());
                             }
                         }
-
                         @Override
                         public void onError(Throwable throwable) {
                             Log.e("MainActivity", "Could not initialize player: " + throwable.getMessage());
                         }
                     });
                 } else if (response.getType() == AuthenticationResponse.Type.ERROR) {
-//                txtResult.setText("access token: " + response.getAccessToken() + "\nCode: " + response.getCode() + "\nError: " + response.getError());
-                } else {
-//                txtResult.setText(String.valueOf("misc"));
+                    txtResult.setText("access token: " + response.getAccessToken() + "\nCode: " + response.getCode() + "\nError: " + response.getError());
                 }
             }
         } catch (Error e) {
             Log.v("error",e.toString());
 
         }
-
+    }
+    /**
+     * Creating google api client object
+     * */
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API).build();
     }
 
-    @Override
-    public void onLoggedIn() {
-        Log.d("MainActivity", "User logged in");
-    }
-
-    @Override
-    public void onLoggedOut() {
-        Log.d("MainActivity", "User logged out");
-    }
-
-    @Override
-    public void onLoginFailed(Throwable error) {
-        Log.d("MainActivity", "Login failed");
-    }
-
-    @Override
-    public void onTemporaryError() {
-        Log.d("MainActivity", "Temporary error occurred");
-    }
-
-    @Override
-    public void onConnectionMessage(String message) {
-        Log.d("MainActivity", "Received connection message: " + message);
-    }
-
-    @Override
-    public void onPlaybackEvent(EventType eventType, PlayerState playerState) {
-        Log.d("MainActivity", "Playback event received: " + eventType.name());
-        updateView();
-
-        String uri = playerState.trackUri;
-        String [] elems = uri.split(":");
-        int i = 0;
-        String mytrackuri = "";
-        for(String elem : elems) {
-            i++;
-            if(i == 3) {
-                mytrackuri = elem;
+    /**
+     * Method to verify google play services on the device
+     * */
+    private boolean checkPlayServices() {
+        int resultCode = GooglePlayServicesUtil
+                .isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
+                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            } else {
+                Toast.makeText(getApplicationContext(),
+                        "This device is not supported.", Toast.LENGTH_LONG)
+                        .show();
+                finish();
             }
+            return false;
         }
-        final String currentText = txtResult.getText().toString();
-        final String u = mytrackuri;
-
-        final String place = ((com.xeno.MusTrip.MyApplication) this.getApplication()).currPlace;
-
-        spotify.getTrack(mytrackuri, new Callback<Track>() {
-            @Override
-            public void success(Track track, Response response) {
-                String toSet = "Currently Playing:\n" + track.name;
-                if(!place.equals("")) {
-                    toSet = "Currently Playing From " + place + ":\n" + track.name;
-                }
-                if(!(new String(toSet).equals(currentText))) {
-                    txtResult.setText(toSet);
-                    txtResult.setText("Currently Playing from " + place + "\n" + track.name);
-
-                   // addSong(,track.name, " ");
-                }
-
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                txtResult.setText("Error");
-            }
-        });
-        updateView();
-
-
-        spotify.getAlbum(mytrackuri, new Callback<Album>() {
-            @Override
-            public void success(Album album, Response response) {
-                txtResult.setText(txtResult.getText() + " - " + album.name);
-
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                Log.v("Trying to get album...", "fail");
-            }
-        });
-
-
-
+        return true;
     }
+    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 1000;
 
-    public void addSong(Bitmap cover, String name, String place) {
-        Song s = new Song(cover, name, place);
-        s.setPlace(((MyApplication) this.getApplication()).currPlace);
-        if((!((MyApplication) this.getApplication()).containsSong(s))) {
-            ((MyApplication) this.getApplication()).songQueue.add(s);
-        }
-
-    }
-
-    @Override
-    public void onPlaybackError(ErrorType errorType, String errorDetails) {
-        Log.d("MainActivity", "Playback error received: " + errorType.name());
-        switch (errorType) {
-            // Handle error type as necessary
-            default:
-                break;
+    private void retrieveLocation() {
+        if(checkLocationPermission()) {
+            mLastLocation = LocationServices.FusedLocationApi
+                    .getLastLocation(mGoogleApiClient);
         }
     }
 
+    @Override
+    public void onSearch(View view) throws Exception {
+        final ProgressDialog progress;
+        String myLat = "";
+        String myLng = "";
+        if (mLastLocation != null) {
+            myLat = Double.toString(mLastLocation.getLatitude());
+            myLng = Double.toString(mLastLocation.getLongitude());
+        }
+        else {
+            myLat = "42";
+            myLng = "-71";
+        }
+        final String Lat = myLat;
+        final String Lng = myLng;
+
+
+        progress = ProgressDialog.show(this, "One moment", "Retrieving location", true);
+        String requestUrl = "https://flask-mustrip.herokuapp.com/getPlaylist";
+        RequestQueue queue = Volley.newRequestQueue(this);
+        StringRequest sr = new StringRequest(Request.Method.POST,
+                requestUrl,
+                new com.android.volley.Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonRes = new JSONObject(response);
+                            CurrLoc = (jsonRes.getString("city"));
+                            if (CurrLoc != "error") {
+                                CurrTrack = "spotify:user:thesoundsofspotify:playlist:" + jsonRes.getString("playlist");
+                                mPlayer.play(CurrTrack);
+                            }
+                        }
+                        catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        progress.dismiss();
+                    }
+                }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("lat", Lat);
+                params.put("lng", Lng);
+                return params;
+            }
+        };
+        sr.setRetryPolicy(new DefaultRetryPolicy(
+                5000,
+                0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
+        queue.add(sr);
+
+    }
+    public boolean checkLocationPermission(){
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Asking user if explanation is needed
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+                //Prompt the user once explanation has been shown
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_LOCATION);
+
+
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_LOCATION);
+            }
+            return false;
+        } else {
+            return true;
+        }
+    }
+    @Override
+    public void onConnectionFailed(ConnectionResult result) {
+
+    }
 
     @Override
-    protected void onDestroy() {
-        // VERY IMPORTANT! This must always be called or else you will leak resources
-        Spotify.destroyPlayer(this);
-        super.onDestroy();
+    public void onConnected(Bundle arg0) {
+        // Once connected with google api, get the location
+        retrieveLocation();
+
     }
-
-    public void updateView() {
-        ArrayList<String> arrlist=new ArrayList<>();
-
-        final ArrayList q = ((MyApplication) this.getApplication()).songQueue;
-
-        String temp = "";
-        for(int i = 0; i < q.size(); i++) {
-            temp += String.valueOf(i) + ": " + q.get(i).toString() + "\n";
-            arrlist.add(q.get(i).toString());
-        }
-        //txtTemp.setText(temp);
-        lv.setAdapter(new ArrayAdapter<>(this,android.R.layout.simple_list_item_1 , arrlist));
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
-            // argument position gives the index of item which is clicked
-            public void onItemClick(AdapterView<?> arg0, View v,int position, long arg3)
-            {
-                Song curr = (Song)q.get(position);
-                String str = "temp";curr.getPlace();
-                Toast.makeText(getApplicationContext(), "Location : "+ str,   Toast.LENGTH_LONG).show();
-            }
-        });
+    @Override
+    public void onConnectionSuspended(int arg0) {
+        mGoogleApiClient.connect();
     }
-
-
-
-
 }
+
+
+
+

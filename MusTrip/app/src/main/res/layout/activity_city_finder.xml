@@ -61,7 +61,7 @@
         android:text="Get Playlist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/search"
+        android:id="@+id/map"
         android:icon="@mipmap/ic_play"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
@@ -94,7 +94,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/input"
         android:singleLine="true"
-        android:layout_above="@+id/search"
+        android:layout_above="@+id/map"
         android:layout_centerHorizontal="true" />
 
     <ImageView

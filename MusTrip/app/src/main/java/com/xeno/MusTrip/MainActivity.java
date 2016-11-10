@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         btnStart.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this,MapPlayer.class);
+                intent.putExtra("MODE_ID", 0);
                 startActivity(intent);
             }
         });
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         btnSearch.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, CityFinder.class);
+                intent.putExtra("MODE_ID", 1);
                 startActivity(intent);
             }
         });
