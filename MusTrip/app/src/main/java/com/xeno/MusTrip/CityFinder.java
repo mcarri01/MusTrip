@@ -380,7 +380,9 @@ public class CityFinder extends Activity implements
                             CurrLoc = (jsonRes.getString("city"));
                             if (CurrLoc != "error") {
                                 CurrTrack = "spotify:user:thesoundsofspotify:playlist:" + jsonRes.getString("playlist");
-                                mPlayer.play(CurrTrack);
+                                if (CurrTrack != null) {
+                                    mPlayer.play(CurrTrack);
+                                }
 
                             }
                         }
