@@ -20,6 +20,9 @@ import javax.net.ssl.HttpsURLConnection;
 
 /**
  * Created by david bernstein on 10/11/16.
+ * The song class contains its name, album cover, and where it is from
+ * so that when played through the list adapter, all necessary information for each song
+ * can be easily displayed
  */
 
 public class Song {

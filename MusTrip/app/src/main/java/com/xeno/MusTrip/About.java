@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 /**
  * Created by mcarr on 11/7/2016.
+ *
+ * The About class simply displays the "about" section layout
  */
 public class About extends Activity {
 

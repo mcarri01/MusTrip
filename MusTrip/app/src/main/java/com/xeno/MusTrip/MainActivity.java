@@ -14,6 +14,13 @@ import com.crashlytics.android.Crashlytics;
 
 import io.fabric.sdk.android.Fabric;
 
+/**
+ * Main Activity for MusTrip
+ * Sets up main page for the app, user can select whether to read the About section, or whether
+ * to select the "Trip" or "Search" modes.
+ *
+ */
+
 public class MainActivity extends AppCompatActivity {
 
     ImageButton btnStart;
@@ -31,22 +38,23 @@ public class MainActivity extends AppCompatActivity {
         search.setImageResource(R.drawable.find);
         trip.setImageResource(R.drawable.trip);
 
+        /* If user selects trip mode */
         btnStart = (ImageButton) findViewById(R.id.trip);
         btnStart.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this,MapPlayer.class);
-                intent.putExtra("MODE_ID", 0);
                 startActivity(intent);
             }
         });
+        /* If user wants to search for music by city */
         btnSearch = (ImageButton) findViewById(R.id.find);
         btnSearch.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, CityFinder.class);
-                intent.putExtra("MODE_ID", 1);
                 startActivity(intent);
             }
         });
+        /* Opens about section */
         about = (ImageView) findViewById(R.id.about);
         about.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

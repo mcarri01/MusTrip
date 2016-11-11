@@ -36,24 +36,7 @@ public class MyApplication extends Application {
     public Location currLocation;
     public ArrayList<Song> songQueue = new ArrayList<>();
 
-
-    public boolean containsSong(Song s) {
-        String currName = s.getName();
-        for(int i = 0; i < songQueue.size(); i++) {
-            if(currName.equals(songQueue.get(i).getName())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void changeLocation(final Location location) {
-        //final Location loc = location;
-        currLocation = location;
-        return;
-    }
-
-    public void changeLocation2(final Location location){
+    public void changeLocation(final Location location){
         //final Location loc = location;
         currLocation = location;
         final String lat = String.valueOf(location.getLatitude());
