@@ -9,7 +9,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.xeno.MusTrip.MainActivity"
-    android:background="#C1DAD6" >
+    android:background="#3F51B5" >
 
     <TextView
         android:layout_width="wrap_content"
@@ -18,7 +18,7 @@
         android:textAlignment="center"
         android:textSize="30sp"
         android:id="@+id/textView"
-
+        android:textColor="#C5CAE9"
         android:layout_alignBottom="@+id/about"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="74dp" />
@@ -27,6 +27,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="#C5CEEE"
         android:text="Click below to start \nyour road trip. "
         android:id="@+id/textView2"
         android:layout_above="@+id/trip"
@@ -38,6 +39,7 @@
         android:layout_height="wrap_content"
         android:text="Or  the search button to find music by city"
         android:id="@+id/textView3"
+        android:textColor="#C5CEEE"
         android:layout_alignTop="@+id/textView2"
         android:layout_alignLeft="@+id/find"
         android:layout_alignStart="@+id/find" />
