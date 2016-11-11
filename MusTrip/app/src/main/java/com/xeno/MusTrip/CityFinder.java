@@ -73,6 +73,10 @@ import org.json.JSONArray;
 
 /**
  * Created by mcarr on 11/1/2016.
+ * The CityFinder class allows users to search for music based off city. It begins by initializing
+ * the user to Spotify, and then has appropriate event listeners to store necessary information
+ * about a song and make further requests before playing the song and displaying it in a collective
+ * queue.
  */
 public class CityFinder extends Activity implements
         PlayerNotificationCallback, ConnectionStateCallback {
@@ -105,29 +109,20 @@ public class CityFinder extends Activity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            MODE_ID = extras.getInt("MODE_ID");
-        }
-        if (MODE_ID == 0) {
-            setContentView(R.layout.activity_map_player);
-        }
-        else {
-            setContentView(R.layout.activity_city_finder);
-        }
+        setContentView(R.layout.activity_city_finder);
         lv = (ListView) findViewById(R.id.lv);
         play = (ImageView) findViewById(R.id.btnPlay);
-
         txtResult = (TextView) findViewById(R.id.city);
+
+        /* Spotify authentication */
         AuthenticationRequest.Builder builder =
                 new AuthenticationRequest.Builder(CLIENT_ID, AuthenticationResponse.Type.TOKEN, REDIRECT_URI);
         builder.setScopes(new String[]{"user-read-private", "streaming"});
         final AuthenticationRequest request = builder.build();
         AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);
-        Log.d("Why me", "does this work");
 
+        /* onClick listeners for player buttons */
         btnPlay = (ImageView) findViewById(R.id.btnPlay);
-
         btnPlay.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if(playing) {
@@ -154,6 +149,8 @@ public class CityFinder extends Activity implements
         btnBack = (ImageView) findViewById(R.id.btnRewind);
         btnBack.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                /* Removes song (and the previous, because it will just be added back again,
+                 from the queue, unless there is only a single song left */
                 if (songQueue.size() > 1) {
                     songQueue.remove(1);
                     songQueue.remove(0);
@@ -238,11 +235,12 @@ public class CityFinder extends Activity implements
                 mytrackuri = elem;
             }
         }
+        /* Using TRACK_CHANGED because it encompasses all "play" events */
         if (eventType == EventType.TRACK_CHANGED) {
-
                 spotify.getTrack(mytrackuri, new Callback<Track>() {
                     @Override
                     public void success(Track track, retrofit.client.Response response) {
+                        /* Once it works, we can store the image, now we just need the image for it */
                         CurrTrack = track.name;
                         getImage();
                     }
@@ -258,12 +256,13 @@ public class CityFinder extends Activity implements
         Song s = new Song(cover, name, place);
         songQueue.add(0, s);
     }
-
+    /* Retrieves cover art for the image */
     public void getImage() {
 
         final RequestQueue queue = Volley.newRequestQueue(this);
 
         String requestUrl = "https://api.spotify.com/v1/search?q=" + CurrTrack + "&type=track";
+        /* Some songs have multiple words */
         String encodedUrl = requestUrl.replaceAll(" ", "%20");
 
         StringRequest sr = new StringRequest(Request.Method.GET,
@@ -271,6 +270,7 @@ public class CityFinder extends Activity implements
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        /* Probably a better way to extract the url for the album, but hey */
                         try {
                             JSONObject jsonRes = new JSONObject(response);
                             JSONObject tracks = jsonRes.getJSONObject("tracks");
@@ -284,9 +284,13 @@ public class CityFinder extends Activity implements
                                     new Response.Listener<Bitmap>() {
                                         @Override
                                         public void onResponse(Bitmap bitmap) {
+                                            /* Stores current bitmap */
                                             CurrImage = bitmap;
+                                            /* Updates text at top of queue*/
                                             txtResult.setText("Currently Playing from " + CurrLoc + "\n" + CurrTrack);
+                                            /* Create song object and add to queue */
                                             addSong(CurrImage, CurrTrack, CurrLoc);
+                                            /* Update queue with new info */
                                             updateView();
                                         }
                                     }, 0, 0, null,
@@ -327,22 +331,22 @@ public class CityFinder extends Activity implements
     }
     @Override
     protected void onDestroy() {
-        // VERY IMPORTANT! This must always be called or else you will leak resources
         Spotify.destroyPlayer(this);
         super.onDestroy();
     }
-
+    /* Where song queue is updated */
     public void updateView() {
         ArrayList<String> arrList=new ArrayList<>();
         ArrayList<Bitmap> imageList = new ArrayList<Bitmap>();
         final ArrayList q = songQueue;
+        /* Create separate arrayLists for both the song names and album covers */
         for(int i = 0; i < q.size(); i++) {
             Song s = (Song) q.get(i);
             imageList.add(s.getCover());
             arrList.add(q.get(i).toString());
 
         }
-
+        /* Use custom adaptor to pair up images w/ text */
         lv.setAdapter(new LazyAdapter(this, arrList, imageList));
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
@@ -354,11 +358,15 @@ public class CityFinder extends Activity implements
             }
         });
     }
+    /* When user searches for a city  */
     public void onSearch(View view) throws Exception {
+        /* Gives user information that process is currently running to retrieve playlists */
         final ProgressDialog progress;
         progress = ProgressDialog.show(this, "One moment", "Retrieving songs...", true);
+        /* Get whichever city the user inputted */
         EditText cityinput = (EditText) findViewById(R.id.input);
         final String cityName = cityinput.getText().toString();
+        /* Url for request to server */
         String requestUrl = "https://flask-mustrip.herokuapp.com/playlistbycity";
         RequestQueue queue = Volley.newRequestQueue(this);
         StringRequest sr = new StringRequest(Request.Method.POST,
@@ -367,6 +375,7 @@ public class CityFinder extends Activity implements
                     @Override
                     public void onResponse(String response) {
                         try {
+                            /* Pulls out both the city name and the actual playlist for updating */
                             JSONObject jsonRes = new JSONObject(response);
                             CurrLoc = (jsonRes.getString("city"));
                             if (CurrLoc != "error") {
@@ -387,6 +396,7 @@ public class CityFinder extends Activity implements
             }
         }) {
             @Override
+            /* Creates parameters to pass to request */
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
                 params.put("city", cityName);

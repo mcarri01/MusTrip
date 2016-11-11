@@ -62,6 +62,13 @@ import kaaes.spotify.webapi.android.models.Track;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 
+/**
+ *  The MapPlayer class is identical to the ClassFinder except for how it initializes the playlists,
+ *  as it attempts to use geolocation rather than user input
+ *
+ *
+ */
+
 public class MapPlayer extends CityFinder implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, PlayerNotificationCallback, ConnectionStateCallback {
     private Location myLocation;
@@ -197,7 +204,6 @@ public class MapPlayer extends CityFinder implements GoogleApiClient.ConnectionC
 
         String requestUrl = "https://api.spotify.com/v1/search?q=" + CurrTrack + "&type=track";
         String encodedUrl = requestUrl.replaceAll(" ", "%20");
-
         StringRequest sr = new StringRequest(Request.Method.GET,
                 encodedUrl,
                 new Response.Listener<String>() {
@@ -263,7 +269,6 @@ public class MapPlayer extends CityFinder implements GoogleApiClient.ConnectionC
         }
         final String Lat = myLat;
         final String Lng = myLng;
-
 
         progress = ProgressDialog.show(this, "One moment", "Retrieving location", true);
         String requestUrl = "https://flask-mustrip.herokuapp.com/getPlaylist";
