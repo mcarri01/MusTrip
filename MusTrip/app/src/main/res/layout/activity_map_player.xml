@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="#DCEDC8"
+    android:background="#3F51B5"
     tools:context="com.xeno.MusTrip.MapPlayer">
 
 
@@ -63,6 +63,7 @@
         android:id="@+id/city"
         android:layout_height="65dp"
         android:textAlignment="center"
+        android:textColor="#C5CEEE"
         android:layout_below="@+id/getTracks"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -83,7 +84,8 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/btnRewind"
-        android:background="@drawable/rewind"
+        android:background="@drawable/forward"
+        android:scaleX="-1"
         android:layout_alignParentBottom="true"
         android:layout_toLeftOf="@+id/btnPlay"
         android:layout_toStartOf="@+id/btnPlay" />
@@ -111,6 +113,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Music Nearby"
         android:id="@+id/textView9"
+        android:textColor="#C5CEEE"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
@@ -119,6 +122,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:id="@+id/status"
+        android:textColor="#C5CEEE"
         android:layout_below="@+id/textView9"
         android:layout_centerHorizontal="true" />
 

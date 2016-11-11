@@ -148,7 +148,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onLocationChanged(Location location) {
-        ((MyApplication) this.getApplication()).changeLocation2(location);
+        if (location != null) {
+            ((MyApplication) this.getApplication()).changeLocation2(location);
+        }
 
         Log.v("*******LOCATION: ","CHANGED!!!");
         mLastLocation = location;
