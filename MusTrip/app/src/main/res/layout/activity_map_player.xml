@@ -42,7 +42,7 @@
         android:id="@+id/getTracks"
         android:icon="@mipmap/ic_play"
         android:onClick="onSearch"
-        android:background="#ACD1E9"
+        android:background="#ffa5d2"
         android:layout_below="@+id/textView9"
         android:layout_alignLeft="@+id/btnForward"
         android:layout_alignStart="@+id/btnForward" />
@@ -131,7 +131,7 @@
         android:layout_height="wrap_content"
         android:text="Check Map"
         android:id="@+id/map"
-        android:background="#ACD1E9"
+        android:background="#ffa5d2"
         android:layout_below="@+id/textView9"
         android:layout_toLeftOf="@+id/btnPlay"
         android:layout_alignParentLeft="true"
