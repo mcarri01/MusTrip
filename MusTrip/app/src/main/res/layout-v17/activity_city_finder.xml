@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="#F0F4C3"
+    android:background="#3F51B5"
     tools:context="com.xeno.MusTrip.MapPlayer">
 
 
@@ -43,11 +43,11 @@
         android:icon="@mipmap/ic_play"
         android:onClick="onSearch"
         android:background="#ACD1E9"
-        android:layout_below="@+id/textView9"
+        android:layout_below="@+id/input"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignLeft="@+id/btnForward"
-        android:layout_alignStart="@+id/btnForward" />
+        android:layout_alignParentEnd="true" />
 
     <ListView
         android:id="@+id/lv"
@@ -56,6 +56,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_above="@+id/btnRewind"
+
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/city">
@@ -65,19 +66,21 @@
     <TextView
         android:layout_width="50dp"
         android:id="@+id/city"
+        android:textColor="#C5CAE9"
         android:layout_height="50dp"
         android:textAlignment="center"
-        android:layout_below="@+id/input"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+        android:layout_below="@+id/getTracks"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/input"
         android:singleLine="true"
+        android:textColor="#C5CAE9"
         android:layout_below="@+id/textView4"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
@@ -91,12 +94,21 @@
         android:layout_alignTop="@+id/lv"
         android:layout_alignLeft="@+id/gridLayout"
         android:layout_alignStart="@+id/gridLayout" />
-
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="2dip"
+        android:background="#FFFFFFFF"
+        android:id="@+id/view"
+        android:layout_alignTop="@+id/btnRewind"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
     <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/btnRewind"
-        android:background="@drawable/rewind"
+        android:scaleX="-1"
+        android:background="@drawable/forward"
+
         android:layout_alignParentBottom="true"
         android:layout_toLeftOf="@+id/btnPlay"
         android:layout_toStartOf="@+id/btnPlay" />
@@ -106,7 +118,7 @@
         android:layout_height="50dp"
         android:id="@+id/btnPlay"
         android:background="@drawable/play"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/view"
         android:layout_centerHorizontal="true" />
 
     <ImageView
@@ -114,7 +126,7 @@
         android:layout_height="50dp"
         android:id="@+id/btnForward"
         android:background="@drawable/forward"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/view"
         android:layout_toRightOf="@+id/btnPlay"
         android:layout_toEndOf="@+id/btnPlay" />
 
@@ -124,16 +136,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Enter City Name:"
         android:id="@+id/textView4"
-        android:layout_below="@+id/textView9"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Music Search"
-        android:id="@+id/textView9"
+        android:textColor="#C5CAE9"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 

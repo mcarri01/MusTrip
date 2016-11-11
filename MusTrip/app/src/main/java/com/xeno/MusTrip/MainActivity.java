@@ -31,8 +31,6 @@ public class MainActivity extends AppCompatActivity {
         search.setImageResource(R.drawable.find);
         trip.setImageResource(R.drawable.trip);
 
-
-
         btnStart = (ImageButton) findViewById(R.id.trip);
         btnStart.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

@@ -90,10 +90,10 @@ public class CityFinder extends Activity implements
     private ImageView btnPlay;
     private ImageView btnBack;
     private ImageView btnForward;
-    private Boolean started = false;
     private String CurrTrack;
     private String CurrLoc;
     private Bitmap CurrImage;
+    public ArrayList<Song> songQueue = new ArrayList<>();
     private int MODE_ID;
     private ImageView play;
     TextView txtResult;
@@ -147,7 +147,6 @@ public class CityFinder extends Activity implements
         btnForward.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 mPlayer.skipToNext();
-                //if(!playing) {mPlayer.pause();}
 
             }
         });
@@ -155,9 +154,11 @@ public class CityFinder extends Activity implements
         btnBack = (ImageView) findViewById(R.id.btnRewind);
         btnBack.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                if (songQueue.size() > 1) {
+                    songQueue.remove(1);
+                    songQueue.remove(0);
+                }
                 mPlayer.skipToPrevious();
-                //if(!playing){mPlayer.pause();}
-
             }
         });
     }
@@ -255,7 +256,7 @@ public class CityFinder extends Activity implements
 
     public void addSong(Bitmap cover, String name, String place) {
         Song s = new Song(cover, name, place);
-        ((MyApplication) this.getApplication()).songQueue.add(0, s);
+        songQueue.add(0, s);
     }
 
     public void getImage() {
@@ -333,33 +334,16 @@ public class CityFinder extends Activity implements
 
     public void updateView() {
         ArrayList<String> arrList=new ArrayList<>();
-        //ArrayList<ImageDownloader> imagelist= new ArrayList<>();
         ArrayList<Bitmap> imageList = new ArrayList<Bitmap>();
-        final ArrayList q = ((MyApplication) this.getApplication()).songQueue;
-
-//        ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
-//        for(int i = 0; i < q.size(); i++) {
-//            Map<String, String> datum = new HashMap<String, String>(2);
-//            Song s = (Song) q.get(i);
-//            datum.put("url", s.getUri());
-//            datum.put("track", q.get(i).toString());
-//        }
-
+        final ArrayList q = songQueue;
         for(int i = 0; i < q.size(); i++) {
             Song s = (Song) q.get(i);
-            // ImageView cover = new ImageView(this);
-
-            //ImageDownloader image = new ImageDownloader(s.getUri());
-            //Bitmap img = image.doInBackground();
-            // imageList.add()
             imageList.add(s.getCover());
             arrList.add(q.get(i).toString());
 
         }
 
         lv.setAdapter(new LazyAdapter(this, arrList, imageList));
-        //lv.setAdapter(new SimpleAdapter(this, , R.layout.row_layout, new String[] {"i", "name"}, new int[] {R.id.list_image, R.id.title}));
-        //lv.setAdapter(new ArrayAdapter<>(this,android.R.layout.simple_list_item_1 , arrlist));
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             // argument position gives the index of item which is clicked
@@ -370,7 +354,6 @@ public class CityFinder extends Activity implements
             }
         });
     }
-
     public void onSearch(View view) throws Exception {
         final ProgressDialog progress;
         progress = ProgressDialog.show(this, "One moment", "Retrieving songs...", true);
