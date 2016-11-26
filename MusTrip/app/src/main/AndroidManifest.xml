@@ -31,26 +31,15 @@
         </activity>
         <activity android:name=".About"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
         <activity android:name=".MapPlayer"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".CityFinder" android:windowSoftInputMode="adjustPan">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <action android:name="android.intent.cateogry.LAUNCHER" />
 
-            </intent-filter>
         </activity>
 
         <activity
@@ -69,7 +58,7 @@
             android:value="@string/google_maps_key" />
 
 
-        <meta-data android:name="com.google.android.geo.API_KEY" android:value="@string/google_maps_key" />
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyAe-oyLsIsb_PO0T4e1XdvRSmdRhStx4ko" />
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
         <activity
             android:name=".MapsActivity"

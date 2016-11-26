@@ -28,7 +28,8 @@ import android.content.Intent;
         import com.android.volley.Request;
         import com.android.volley.RequestQueue;
         import com.android.volley.Response;
-        import com.android.volley.VolleyError;
+import com.android.volley.TimeoutError;
+import com.android.volley.VolleyError;
         import com.android.volley.toolbox.ImageRequest;
         import com.android.volley.toolbox.StringRequest;
         import com.android.volley.toolbox.Volley;
@@ -89,13 +90,14 @@ public class CityFinder extends Activity implements
     // Can be any integer
 
     private static final int REQUEST_CODE = 1337;
-    private boolean playing = false;
+    private boolean playing = true;
     public Player mPlayer;
     private ImageView btnPlay;
     private ImageView btnBack;
     private ImageView btnForward;
     private String CurrTrack;
     private String CurrLoc;
+    private String CurrArtist;
     private Bitmap CurrImage;
     public ArrayList<Song> songQueue = new ArrayList<>();
     private int MODE_ID;
@@ -127,11 +129,11 @@ public class CityFinder extends Activity implements
             public void onClick(View v) {
                 if(playing) {
                     mPlayer.pause();
-                    play.setImageResource(R.drawable.pause);
+                    play.setBackgroundResource(R.drawable.play);
 
                 } else {
                     mPlayer.resume();
-                    play.setImageResource(R.drawable.play);
+                    play.setBackgroundResource(R.drawable.pause);
 
                 }
                 playing = !playing;
@@ -249,11 +251,12 @@ public class CityFinder extends Activity implements
                         txtResult.setText("Error");
                     }
                 });
+
             }
     }
 
-    public void addSong(Bitmap cover, String name, String place) {
-        Song s = new Song(cover, name, place);
+    public void addSong(Bitmap cover, String name, String place, String artist) {
+        Song s = new Song(cover, name, place, artist);
         songQueue.add(0, s);
     }
     /* Retrieves cover art for the image */
@@ -277,6 +280,10 @@ public class CityFinder extends Activity implements
                             JSONArray items = tracks.getJSONArray("items");
                             JSONObject album = items.getJSONObject(0);
                             JSONObject test = album.getJSONObject("album");
+                            JSONArray artists = test.getJSONArray("artists");
+                            JSONObject artist = artists.getJSONObject(0);
+                            CurrArtist = artist.getString("name");
+
                             JSONArray images = test.getJSONArray("images");
                             JSONObject image = images.getJSONObject(0);
                             String url = image.getString("url");
@@ -289,7 +296,7 @@ public class CityFinder extends Activity implements
                                             /* Updates text at top of queue*/
                                             txtResult.setText("Currently Playing from " + CurrLoc + "\n" + CurrTrack);
                                             /* Create song object and add to queue */
-                                            addSong(CurrImage, CurrTrack, CurrLoc);
+                                            addSong(CurrImage, CurrTrack, CurrLoc, CurrArtist);
                                             /* Update queue with new info */
                                             updateView();
                                         }
@@ -316,7 +323,7 @@ public class CityFinder extends Activity implements
                 error.printStackTrace();
             }
         });
-        sr.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
+        sr.setRetryPolicy(new DefaultRetryPolicy(5000, 0,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         queue.add(sr);
     }
@@ -377,13 +384,19 @@ public class CityFinder extends Activity implements
                         try {
                             /* Pulls out both the city name and the actual playlist for updating */
                             JSONObject jsonRes = new JSONObject(response);
-                            CurrLoc = (jsonRes.getString("city"));
-                            if (CurrLoc != "error") {
+                            String location = (jsonRes.getString("city"));
+
+                            if (!location.equals("error")) {
                                 CurrTrack = "spotify:user:thesoundsofspotify:playlist:" + jsonRes.getString("playlist");
+                                CurrLoc = location;
                                 if (CurrTrack != null) {
                                     mPlayer.play(CurrTrack);
                                 }
-
+                            }
+                            else {
+                                Toast.makeText(CityFinder.this, "Please provide a valid city",
+                                        Toast.LENGTH_LONG).show();
+                                mPlayer.clearQueue();
                             }
                         }
                         catch (JSONException e) {
@@ -394,9 +407,16 @@ public class CityFinder extends Activity implements
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
+                if (error.networkResponse == null) {
+                    if (error.getClass().equals(TimeoutError.class)) {
+                        progress.dismiss();
+                        Toast.makeText(CityFinder.this, "Please provide a valid city",
+                                Toast.LENGTH_LONG).show();
+                    }
+                }
             }
-        }) {
+        })
+        {
             @Override
             /* Creates parameters to pass to request */
             protected Map<String, String> getParams() {
@@ -404,6 +424,7 @@ public class CityFinder extends Activity implements
                 params.put("city", cityName);
                 return params;
             }
+
         };
         sr.setRetryPolicy(new DefaultRetryPolicy(
                 5000,
