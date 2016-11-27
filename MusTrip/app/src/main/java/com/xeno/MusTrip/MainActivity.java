@@ -31,8 +31,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
-        getSupportActionBar().setDisplayShowHomeEnabled(false);
-        getSupportActionBar().setDisplayUseLogoEnabled(false);
+
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        getSupportActionBar().setLogo(R.drawable.music);
+
         setContentView(R.layout.activity_main);
         ImageView search = (ImageView) findViewById(R.id.find);
         ImageView trip = (ImageView) findViewById(R.id.trip);

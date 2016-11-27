@@ -9,7 +9,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.xeno.MusTrip.MainActivity"
-    android:background="#3F51B5" >
+    android:background="@color/colorPrimary" >
 
     <TextView
         android:layout_width="wrap_content"
@@ -18,7 +18,7 @@
         android:textAlignment="center"
         android:textSize="30sp"
         android:id="@+id/textView"
-        android:textColor="#C5CAE9"
+        android:textColor="#C0C0C0"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
@@ -49,10 +49,10 @@
         android:id="@+id/about"
         android:background="@drawable/about"
         android:onClick="onAboutClick"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="87dp"
         android:layout_below="@+id/textView"
-        android:layout_toRightOf="@+id/trip"
-        android:layout_toEndOf="@+id/trip" />
+        android:layout_toLeftOf="@+id/textView3"
+        android:layout_toStartOf="@+id/textView3" />
 
     <ImageButton
         android:layout_width="150dp"
@@ -60,9 +60,12 @@
         android:id="@+id/trip"
         android:background="@drawable/trip"
         android:onClick="onTripClick"
-        android:layout_alignTop="@+id/find"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@+id/about"
+        android:layout_alignTop="@+id/find"
+        android:layout_toLeftOf="@+id/about" />
 
     <ImageButton
         android:layout_width="150dp"
@@ -70,10 +73,9 @@
         android:id="@+id/find"
         android:background="@drawable/magnifying"
         android:onClick="onSearchClick"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginBottom="62dp" />
+        android:layout_alignParentBottom="true" />
 
     <TextView
         android:layout_width="wrap_content"
