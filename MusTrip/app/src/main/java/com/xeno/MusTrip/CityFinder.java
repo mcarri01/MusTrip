@@ -1,4 +1,7 @@
 package com.xeno.MusTrip;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -17,7 +20,7 @@ import android.content.Intent;
         import android.widget.AdapterView;
         import android.widget.ArrayAdapter;
         import android.widget.Button;
-        import android.widget.EditText;
+        import android.widget.SearchView;
         import android.widget.ImageView;
         import android.widget.ListView;
         import android.widget.SimpleAdapter;
@@ -79,7 +82,7 @@ import org.json.JSONArray;
  * about a song and make further requests before playing the song and displaying it in a collective
  * queue.
  */
-public class CityFinder extends Activity implements
+public class CityFinder extends AppCompatActivity implements
         PlayerNotificationCallback, ConnectionStateCallback {
 
 
@@ -100,7 +103,6 @@ public class CityFinder extends Activity implements
     private String CurrArtist;
     private Bitmap CurrImage;
     public ArrayList<Song> songQueue = new ArrayList<>();
-    private int MODE_ID;
     private ImageView play;
     TextView txtResult;
     SpotifyApi api = new SpotifyApi();
@@ -112,6 +114,12 @@ public class CityFinder extends Activity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_city_finder);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#3399FF")));
+        getSupportActionBar().setTitle("Search for Music by City");
+        //getSupportActionBar().setLogo(R.drawable.music);
+
         lv = (ListView) findViewById(R.id.lv);
         play = (ImageView) findViewById(R.id.btnPlay);
         txtResult = (TextView) findViewById(R.id.city);
@@ -294,7 +302,7 @@ public class CityFinder extends Activity implements
                                             /* Stores current bitmap */
                                             CurrImage = bitmap;
                                             /* Updates text at top of queue*/
-                                            txtResult.setText("Currently Playing from " + CurrLoc + "\n" + CurrTrack);
+                                            txtResult.setText(Html.fromHtml("Currently Playing from " + CurrLoc + "\n<br>" + CurrTrack + "</br>"));
                                             /* Create song object and add to queue */
                                             addSong(CurrImage, CurrTrack, CurrLoc, CurrArtist);
                                             /* Update queue with new info */
@@ -371,8 +379,8 @@ public class CityFinder extends Activity implements
         final ProgressDialog progress;
         progress = ProgressDialog.show(this, "One moment", "Retrieving songs...", true);
         /* Get whichever city the user inputted */
-        EditText cityinput = (EditText) findViewById(R.id.input);
-        final String cityName = cityinput.getText().toString();
+        SearchView cityinput = (SearchView) findViewById(R.id.input);
+        final String cityName = cityinput.getQuery().toString();
         /* Url for request to server */
         String requestUrl = "https://flask-mustrip.herokuapp.com/playlistbycity";
         RequestQueue queue = Volley.newRequestQueue(this);

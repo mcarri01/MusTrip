@@ -69,6 +69,7 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
         transitive = true;
     }
+
     compile 'com.spotify.sdk:spotify-auth:1.0.0-beta13@aar'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     compile 'com.spotify.sdk:spotify-player:1.0.0-beta13@aar'

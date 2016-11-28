@@ -70,10 +70,14 @@ import retrofit.RetrofitError;
  */
 
 public class MapPlayer extends CityFinder implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, PlayerNotificationCallback, ConnectionStateCallback {
+        GoogleApiClient.OnConnectionFailedListener,
+        PlayerNotificationCallback,
+        ConnectionStateCallback,
+        com.google.android.gms.location.LocationListener {
     private Location myLocation;
     private String CurrLoc;
     private String CurrTrack;
+    private String CurrArtist;
     private Bitmap CurrImage;
     private ListView lv;
     private ImageView btnPlay;
@@ -97,6 +101,7 @@ public class MapPlayer extends CityFinder implements GoogleApiClient.ConnectionC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_player);
+        getSupportActionBar().setTitle("Find Popular Music in Your Area");
         lv = (ListView) findViewById(R.id.lv);
         play = (ImageView) findViewById(R.id.btnPlay);
         if (checkPlayServices()) {
@@ -118,11 +123,11 @@ public class MapPlayer extends CityFinder implements GoogleApiClient.ConnectionC
             public void onClick(View v) {
                 if(playing) {
                     mPlayer.pause();
-                    play.setImageResource(R.drawable.pause);
+                    play.setBackgroundResource(R.drawable.play);
 
                 } else {
                     mPlayer.resume();
-                    play.setImageResource(R.drawable.play);
+                    play.setBackgroundResource(R.drawable.pause);
 
                 }
                 playing = !playing;
@@ -154,7 +159,12 @@ public class MapPlayer extends CityFinder implements GoogleApiClient.ConnectionC
            }
         });
     }
-
+    @Override
+    public void onLocationChanged(Location location) {
+        myLocation = location;
+        Toast.makeText(getApplicationContext(), "Location found!",
+                Toast.LENGTH_LONG).show();
+    }
     /**
      * Creating google api client object
      * */
@@ -194,8 +204,8 @@ public class MapPlayer extends CityFinder implements GoogleApiClient.ConnectionC
                     .getLastLocation(mGoogleApiClient);
         }
     }
-    public void addSong(Bitmap cover, String name, String place) {
-        Song s = new Song(cover, name, place);
+    public void addSong(Bitmap cover, String name, String place, String artist) {
+        Song s = new Song(cover, name, place, artist);
         ((MyApplication) this.getApplication()).songQueue.add(0, s);
     }
     public void getImage() {
@@ -215,6 +225,10 @@ public class MapPlayer extends CityFinder implements GoogleApiClient.ConnectionC
                             JSONArray items = tracks.getJSONArray("items");
                             JSONObject album = items.getJSONObject(0);
                             JSONObject test = album.getJSONObject("album");
+                            JSONArray artists = test.getJSONArray("artists");
+                            JSONObject artist = artists.getJSONObject(0);
+                            CurrArtist = artist.getString("name");
+
                             JSONArray images = test.getJSONArray("images");
                             JSONObject image = images.getJSONObject(0);
                             String url = image.getString("url");
@@ -224,7 +238,7 @@ public class MapPlayer extends CityFinder implements GoogleApiClient.ConnectionC
                                         public void onResponse(Bitmap bitmap) {
                                             CurrImage = bitmap;
                                             txtResult.setText("Currently Playing from " + CurrLoc + "\n" + CurrTrack);
-                                            addSong(CurrImage, CurrTrack, CurrLoc);
+                                            addSong(CurrImage, CurrTrack, CurrLoc, CurrArtist);
                                             updateView();
                                         }
                                     }, 0, 0, null,

@@ -9,8 +9,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="#3F51B5"
-    tools:context="com.xeno.MusTrip.MapPlayer">
+    android:background="#FFFFFF"
+    tools:context=".CityFinder">
 
 
     <GridLayout
@@ -42,10 +42,9 @@
         android:id="@+id/getTracks"
         android:icon="@mipmap/ic_play"
         android:onClick="onSearch"
-        android:background="#ffa5d2"
-        android:layout_below="@+id/textView9"
-        android:layout_alignLeft="@+id/btnForward"
-        android:layout_alignStart="@+id/btnForward" />
+        android:background="@drawable/mybutton"
+        android:layout_toRightOf="@+id/btnPlay"
+        android:layout_toEndOf="@+id/btnPlay" />
 
     <ListView
         android:id="@+id/lv"
@@ -63,7 +62,6 @@
         android:id="@+id/city"
         android:layout_height="65dp"
         android:textAlignment="center"
-        android:textColor="#C5CEEE"
         android:layout_below="@+id/getTracks"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -87,14 +85,14 @@
         android:background="@drawable/forward"
         android:scaleX="-1"
         android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/btnPlay"
-        android:layout_toStartOf="@+id/btnPlay" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/btnPlay"
-        android:background="@drawable/play"
+        android:background="@drawable/pause"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 
@@ -104,26 +102,16 @@
         android:id="@+id/btnForward"
         android:background="@drawable/forward"
         android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/btnPlay"
-        android:layout_toEndOf="@+id/btnPlay" />
+        android:layout_alignRight="@+id/lv"
+        android:layout_alignEnd="@+id/lv" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Music Nearby"
-        android:id="@+id/textView9"
-        android:textColor="#C5CEEE"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:id="@+id/status"
-        android:textColor="#C5CEEE"
-        android:layout_below="@+id/textView9"
         android:layout_centerHorizontal="true" />
 
     <Button
@@ -131,9 +119,27 @@
         android:layout_height="wrap_content"
         android:text="Check Map"
         android:id="@+id/map"
-        android:background="#ffa5d2"
-        android:layout_below="@+id/textView9"
+        android:background="@drawable/mybutton"
         android:layout_toLeftOf="@+id/btnPlay"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dip"
+        android:background="#000000"
+
+        android:id="@+id/bottombar"
+        android:layout_below="@+id/lv"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dip"
+        android:background="#000000"
+
+        android:id="@+id/topbar"
+        android:layout_alignBottom="@+id/city"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 

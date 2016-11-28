@@ -2,6 +2,8 @@ package com.xeno.MusTrip;
 
 import android.content.Intent;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -31,10 +33,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
-
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayUseLogoEnabled(true);
-        getSupportActionBar().setLogo(R.drawable.music);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#3399FF")));
+        getSupportActionBar().setTitle("Welcome to MusTrip");
 
         setContentView(R.layout.activity_main);
         ImageView search = (ImageView) findViewById(R.id.find);

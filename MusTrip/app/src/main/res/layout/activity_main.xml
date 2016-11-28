@@ -9,81 +9,85 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.xeno.MusTrip.MainActivity"
-    android:background="@color/colorPrimary" >
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Welcome to MusTrip. "
-        android:textAlignment="center"
-        android:textSize="30sp"
-        android:id="@+id/textView"
-        android:textColor="#C0C0C0"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+    android:background="#FFFFFF" >
 
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#C5CEEE"
-        android:text="Click below to start \nyour road trip. "
+        android:text="Click below to start your road trip. "
         android:id="@+id/textView2"
-        android:layout_above="@+id/trip"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_marginTop="53dp"
+        android:layout_alignTop="@+id/trip"
+        android:layout_toRightOf="@+id/trip"
+        android:layout_toEndOf="@+id/trip" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Click to search music by city"
         android:id="@+id/textView3"
-        android:textColor="#C5CEEE"
-        android:layout_alignTop="@+id/textView2"
-        android:layout_alignLeft="@+id/find"
-        android:layout_alignStart="@+id/find" />
+        android:layout_alignBottom="@+id/find"
+        android:layout_toRightOf="@+id/trip"
+        android:layout_toEndOf="@+id/trip"
+        android:layout_marginBottom="47dp" />
 
     <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_gravity="center_vertical"
         android:id="@+id/about"
         android:background="@drawable/about"
         android:onClick="onAboutClick"
-        android:layout_marginTop="87dp"
-        android:layout_below="@+id/textView"
-        android:layout_toLeftOf="@+id/textView3"
-        android:layout_toStartOf="@+id/textView3" />
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/find"
+        android:layout_alignEnd="@+id/find"
+        android:layout_marginTop="58dp" />
 
     <ImageButton
-        android:layout_width="150dp"
+        android:layout_width="200dp"
         android:layout_height="130dp"
+        android:layout_gravity="center"
+        android:gravity="center"
         android:id="@+id/trip"
         android:background="@drawable/trip"
         android:onClick="onTripClick"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_toStartOf="@+id/about"
-        android:layout_alignTop="@+id/find"
-        android:layout_toLeftOf="@+id/about" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <ImageButton
-        android:layout_width="150dp"
+        android:layout_width="175dp"
         android:layout_height="130dp"
+        android:layout_gravity="center"
+        android:gravity="center"
         android:id="@+id/find"
         android:background="@drawable/magnifying"
         android:onClick="onSearchClick"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/topbar"
+        android:layout_toStartOf="@+id/textView3"
+        android:layout_alignRight="@+id/trip"
+        android:layout_alignEnd="@+id/trip" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Please read &quot;About&quot; before usage!"
         android:id="@+id/textView10"
-        android:textColor="#C5CEEE"
         android:layout_below="@+id/about"
         android:layout_centerHorizontal="true" />
 
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dip"
+        android:background="#000000"
+
+        android:id="@+id/topbar"
+
+        android:layout_above="@+id/trip"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>
