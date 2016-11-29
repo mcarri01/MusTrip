@@ -102,7 +102,7 @@ public class CityFinder extends AppCompatActivity implements
     private String CurrLoc;
     private String CurrArtist;
     private Bitmap CurrImage;
-    public ArrayList<Song> songQueue = new ArrayList<>();
+    private ArrayList<Song> songQueue = new ArrayList<>();
     private ImageView play;
     TextView txtResult;
     SpotifyApi api = new SpotifyApi();
@@ -232,7 +232,6 @@ public class CityFinder extends AppCompatActivity implements
     @Override
     public void onPlaybackEvent(PlayerNotificationCallback.EventType eventType, PlayerState playerState) {
 
-        Log.d("MainActivity", "Playback event received: " + eventType.name());
         String uri = playerState.trackUri;
         String[] elems = uri.split(":");
 

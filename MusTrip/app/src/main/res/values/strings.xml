@@ -7,8 +7,8 @@
         tie your own adventures with music. It uses Spotify\'s own resources to find uniquely distinct
         music to a particular city or to the nearest city from your geolocation. Because it uses
         Spotify\'s internal data on track play distributions, it supports up to 543 cities currently
-        worldwide, mostly in North America and Europe. For full functionality, it requires your
-        login to Spotify.
+        worldwide, mostly in North America and Europe. For full functionality, it requires access
+        to a Spotify premium account.
     </string>
     <string name="modes">
         This app supports both our "Trip" experience and its "Music Finder". The Trip mode allows
