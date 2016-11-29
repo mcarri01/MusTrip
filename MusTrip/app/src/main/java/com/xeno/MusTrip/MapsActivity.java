@@ -2,10 +2,15 @@ package com.xeno.MusTrip;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
@@ -21,12 +26,16 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.ArrayList;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
@@ -34,10 +43,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LocationListener {
 
     private GoogleMap mMap;
+    private MapView mMapView;
     GoogleApiClient mGoogleApiClient;
     public Location mLastLocation;
     Marker mCurrLocationMarker;
     LocationRequest mLocationRequest;
+    private String CurrSong;
+    private String CurrArtist;
+    private Bitmap CurrImage;
+    private ArrayList<String> songs = new ArrayList<String>();
+    private ArrayList<String> artists = new ArrayList<String>();
+    private ArrayList<Bitmap> covers = new ArrayList<Bitmap>();
+    private ArrayList<MarkerOptions> markers = new ArrayList<MarkerOptions>();
+    private CameraPosition cp = null;
+    private LatLng latLng;
 
     private int counter = 0;
     private Button btn;
@@ -48,40 +67,56 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            // Restore value of members from saved state
+            songs = savedInstanceState.getStringArrayList("songs");
+            artists = savedInstanceState.getStringArrayList("artists");
+            covers = savedInstanceState.getParcelableArrayList("covers");
+            cp = savedInstanceState.getParcelable("camera");
+        }
         setContentView(R.layout.activity_maps);
-
+        Bundle b = getIntent().getExtras();
+        if (b != null) {
+            CurrSong = b.getString("song");
+            CurrArtist = b.getString("artist");
+            CurrImage = b.getParcelable("album");
+            cp = b.getParcelable("camera");
+            songs.add(CurrSong);
+            artists.add(CurrArtist);
+            covers.add(CurrImage);
+        }
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkLocationPermission();
         }
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        ProgressDialog progress;
-        progress = ProgressDialog.show(this, "One moment", "Retrieving location", true);
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.getTracks);
-        mapFragment.getMapAsync(this);
-        progress.dismiss();
-        Log.v("**********","Finished onCreate");
         btn = (Button) findViewById(R.id.update);
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Log.v("CURR LOCATION:","lat: " + mLastLocation.getLatitude() + " lng: " + mLastLocation.getLongitude());
                 onLocationChanged(mLastLocation);
             }
-        });// set
-//        ((MyApplication) this.getApplication()).incX();
+        });
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.getTracks);
+        mapFragment.getMapAsync(this);
+
+
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save the user's current game state
+        savedInstanceState.putStringArrayList("songs", songs);
+        savedInstanceState.putStringArrayList("artists", artists);
+        savedInstanceState.putParcelableArrayList("covers", covers);
+        savedInstanceState.putParcelable("camera", mMap.getCameraPosition());
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
+    }
 
     @Override
     public void onBackPressed()
     {
-//        Intent intent = new Intent();
-//        intent.putExtra("lat",12);
-//        intent.putExtra("lng",18);
-//        // add data to Intent
-//        setResult(MapsActivity.RESULT_OK, intent);
-
-//        ((MyApplication) this.getApplication()).incX();
 
         super.onBackPressed();
     }
@@ -89,8 +124,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        if (cp != null) {
+            mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+            mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cp));
+        }
 
         //Initialize Google Play Services
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -100,10 +137,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 buildGoogleApiClient();
                 mMap.setMyLocationEnabled(true);
             }
-        }
-        else {
-            buildGoogleApiClient();
-            mMap.setMyLocationEnabled(true);
         }
     }
 
@@ -118,17 +151,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onConnected(Bundle bundle) {
+       if (checkLocationPermission()) {
+           mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                   mGoogleApiClient);
+           if (mLastLocation != null) {
+               //place marker at current position
+               //mGoogleMap.clear();
+               addMarkers(mLastLocation);
+               mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
+               cp = mMap.getCameraPosition();
+           }
 
-        mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(1);
-        mLocationRequest.setFastestInterval(1);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-        }
+           mLocationRequest = new LocationRequest();
+           mLocationRequest.setInterval(5000); //5 seconds
+           mLocationRequest.setFastestInterval(3000); //3 seconds
+           mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
 
+           LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+       }
     }
 
     @Override
@@ -149,24 +189,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         //Place current location marker
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(latLng);
-        markerOptions.title("Current Position" + location.getLatitude() + " " + location.getLongitude());
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-        mCurrLocationMarker = mMap.addMarker(markerOptions);
+        addMarkers(location);
+
 
         //move map camera
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
-
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
+        cp = mMap.getCameraPosition();
         //stop location updates
         if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         }
 
-//        ((MyApplication) this.getApplication()).changeLocation(location);
+    }
+    private void addMarkers(Location location) {
+        latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(latLng);
+        if (CurrSong != null) {
+            markerOptions.title(CurrSong + " - " + CurrArtist);
+            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(CurrImage));
 
+        } else {
+            markerOptions.title("Currently no song playing");
+            markerOptions.icon(BitmapDescriptorFactory.defaultMarker());
+        }
+        markers.add(markerOptions);
+
+        for (int i = 0; i < markers.size(); i++) {
+            mMap.addMarker(markers.get(i));
+        }
     }
 
     @Override
@@ -235,8 +286,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 return;
             }
 
-            // other 'case' lines to check for other permissions this app might request.
-            // You can add here other case statements according to your requirement.
         }
     }
 }

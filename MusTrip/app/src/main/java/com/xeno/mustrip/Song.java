@@ -31,19 +31,17 @@ public class Song {
     private double lat;
     private double lng;
     private String place;
-    private String artist;
 
     public String getName() {return name;}
     public void setCover(Bitmap b) {cover = b;};
     public void setName(String s) {name = s;};
     public void setLocation(double la, double ln) {lat = la; lng = ln; place = findPlace(la,ln);}
-    public void setArtist(String a) {artist = a;}
+
     // Constructor
-    public Song(Bitmap b, String name, String city, String artist) {
+    public Song(Bitmap b, String name, String city) {
         setCover(b);
         setName(name);
         setLocation(0,0);
-        setArtist(artist);
         place = city;
     }
 
@@ -57,7 +55,7 @@ public class Song {
         } else {
             p = place;
         }
-        return name + " - " + artist + "\nFrom: " + p;// + "[" + lat + "," + lng + "]";
+        return name + " - " + p;// + "[" + lat + "," + lng + "]";
     }
 
     public String getLocation(){return "[" + lat + "," + lng + "]";}

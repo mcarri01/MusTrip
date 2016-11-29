@@ -118,7 +118,6 @@ public class CityFinder extends AppCompatActivity implements
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#3399FF")));
         getSupportActionBar().setTitle("Search for Music by City");
-        //getSupportActionBar().setLogo(R.drawable.music);
 
         lv = (ListView) findViewById(R.id.lv);
         play = (ImageView) findViewById(R.id.btnPlay);
