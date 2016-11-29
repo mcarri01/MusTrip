@@ -1,0 +1,146 @@
+Index: app/src/main/java/com/xeno/MusTrip/CityFinder.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/xeno/MusTrip/CityFinder.java	(revision )
++++ app/src/main/java/com/xeno/MusTrip/CityFinder.java	(revision )
+@@ -28,8 +28,7 @@
+         import com.android.volley.Request;
+         import com.android.volley.RequestQueue;
+         import com.android.volley.Response;
+-import com.android.volley.TimeoutError;
+-import com.android.volley.VolleyError;
++        import com.android.volley.VolleyError;
+         import com.android.volley.toolbox.ImageRequest;
+         import com.android.volley.toolbox.StringRequest;
+         import com.android.volley.toolbox.Volley;
+@@ -90,14 +89,13 @@
+     // Can be any integer
+ 
+     private static final int REQUEST_CODE = 1337;
+-    private boolean playing = true;
++    private boolean playing = false;
+     public Player mPlayer;
+     private ImageView btnPlay;
+     private ImageView btnBack;
+     private ImageView btnForward;
+     private String CurrTrack;
+     private String CurrLoc;
+-    private String CurrArtist;
+     private Bitmap CurrImage;
+     public ArrayList<Song> songQueue = new ArrayList<>();
+     private int MODE_ID;
+@@ -129,11 +127,11 @@
+             public void onClick(View v) {
+                 if(playing) {
+                     mPlayer.pause();
+-                    play.setBackgroundResource(R.drawable.play);
++                    play.setImageResource(R.drawable.pause);
+ 
+                 } else {
+                     mPlayer.resume();
+-                    play.setBackgroundResource(R.drawable.pause);
++                    play.setImageResource(R.drawable.play);
+ 
+                 }
+                 playing = !playing;
+@@ -251,12 +249,11 @@
+                         txtResult.setText("Error");
+                     }
+                 });
+-
+             }
+     }
+ 
+-    public void addSong(Bitmap cover, String name, String place, String artist) {
+-        Song s = new Song(cover, name, place, artist);
++    public void addSong(Bitmap cover, String name, String place) {
++        Song s = new Song(cover, name, place);
+         songQueue.add(0, s);
+     }
+     /* Retrieves cover art for the image */
+@@ -280,10 +277,6 @@
+                             JSONArray items = tracks.getJSONArray("items");
+                             JSONObject album = items.getJSONObject(0);
+                             JSONObject test = album.getJSONObject("album");
+-                           // JSONArray artists = test.getJSONArray("artists");
+-                            //JSONObject artist = artists.getJSONObject(1);
+-                            //CurrArtist = artist.getString("name");
+-
+                             JSONArray images = test.getJSONArray("images");
+                             JSONObject image = images.getJSONObject(0);
+                             String url = image.getString("url");
+@@ -296,7 +289,7 @@
+                                             /* Updates text at top of queue*/
+                                             txtResult.setText("Currently Playing from " + CurrLoc + "\n" + CurrTrack);
+                                             /* Create song object and add to queue */
+-                                            addSong(CurrImage, CurrTrack, CurrLoc, CurrArtist);
++                                            addSong(CurrImage, CurrTrack, CurrLoc);
+                                             /* Update queue with new info */
+                                             updateView();
+                                         }
+@@ -323,7 +316,7 @@
+                 error.printStackTrace();
+             }
+         });
+-        sr.setRetryPolicy(new DefaultRetryPolicy(5000, 0,
++        sr.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
+                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+         queue.add(sr);
+     }
+@@ -384,21 +377,15 @@
+                         try {
+                             /* Pulls out both the city name and the actual playlist for updating */
+                             JSONObject jsonRes = new JSONObject(response);
+-                            String location = (jsonRes.getString("city"));
+-
+-                            if (!location.equals("error")) {
++                            CurrLoc = (jsonRes.getString("city"));
++                            if (CurrLoc != "error") {
+                                 CurrTrack = "spotify:user:thesoundsofspotify:playlist:" + jsonRes.getString("playlist");
+-                                CurrLoc = location;
+                                 if (CurrTrack != null) {
+                                     mPlayer.play(CurrTrack);
+                                 }
++
+                             }
+-                            else {
+-                                Toast.makeText(CityFinder.this, "Please provide a valid city",
+-                                        Toast.LENGTH_LONG).show();
+-                                mPlayer.clearQueue();
+-                            }
++                        }
+-                        }
+                         catch (JSONException e) {
+                             e.printStackTrace();
+                         }
+@@ -407,16 +394,9 @@
+                 }, new Response.ErrorListener() {
+             @Override
+             public void onErrorResponse(VolleyError error) {
+-                if (error.networkResponse == null) {
+-                    if (error.getClass().equals(TimeoutError.class)) {
+-                        progress.dismiss();
+-                        Toast.makeText(CityFinder.this, "Please provide a valid city",
+-                                Toast.LENGTH_LONG).show();
++                error.printStackTrace();
+-                    }
++            }
+-                }
+-            }
+-        })
+-        {
++        }) {
+             @Override
+             /* Creates parameters to pass to request */
+             protected Map<String, String> getParams() {
+@@ -424,7 +404,6 @@
+                 params.put("city", cityName);
+                 return params;
+             }
+-
+         };
+         sr.setRetryPolicy(new DefaultRetryPolicy(
+                 5000,
+\ No newline at end of file
