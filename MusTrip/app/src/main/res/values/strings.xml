@@ -14,12 +14,12 @@
         This app supports both our "Trip" experience and its "Music Finder". The Trip mode allows
         a user to find distinctly popular music around their geolocation, and creates a streaming
         playlist. The user can also examine the map and update their position to see if they are
-        closer to a different city than they originally started in. \n
-        The Music Finder mode allows you to type in a city name and playlists of songs that are
+        closer to a different city than they originally started in.
+    </string>
+    <string name="musicFinder"> The Music Finder mode allows you to type in a city name and playlists of songs that are
         distinctly unique to that city. You can hop between cities, whether it be Paris, Lisbon,
         or even San Franciso and Boston. Songs will indicate where they are "from" and just like before
-        the user can interact with the playlist.
-    </string>
+        the user can interact with the playlist.</string>
     <string name="City">
         Music Search
     </string>

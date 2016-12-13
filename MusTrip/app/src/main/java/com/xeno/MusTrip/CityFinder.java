@@ -1,79 +1,50 @@
 package com.xeno.MusTrip;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.ComponentCallbacks2;
 import android.content.Intent;
-        import android.graphics.Bitmap;
-        import android.graphics.BitmapFactory;
-        import android.graphics.Typeface;
-        import android.os.Bundle;
-        import android.support.test.espresso.core.deps.dagger.Component;
-        import android.text.Html;
-        import android.text.SpannableString;
-        import android.text.style.StyleSpan;
-        import android.util.Log;
-        import android.view.View;
-        import android.widget.AdapterView;
-        import android.widget.ArrayAdapter;
-        import android.widget.Button;
-        import android.widget.SearchView;
-        import android.widget.ImageView;
-        import android.widget.ListView;
-        import android.widget.SimpleAdapter;
-        import android.widget.TextView;
-        import android.widget.Toast;
-
-        import com.android.volley.DefaultRetryPolicy;
-        import com.android.volley.Request;
-        import com.android.volley.RequestQueue;
-        import com.android.volley.Response;
+import android.graphics.Bitmap;
+import android.os.Bundle;
+import android.text.Html;
+import android.util.Log;
+import android.widget.AdapterView;
+import android.widget.SearchView;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
-        import com.android.volley.toolbox.ImageRequest;
-        import com.android.volley.toolbox.StringRequest;
-        import com.android.volley.toolbox.Volley;
-
-        import com.spotify.sdk.android.authentication.AuthenticationClient;
-        import com.spotify.sdk.android.authentication.AuthenticationRequest;
-        import com.spotify.sdk.android.authentication.AuthenticationResponse;
-        import com.spotify.sdk.android.player.Config;
-        import com.spotify.sdk.android.player.ConnectionStateCallback;
-        import com.spotify.sdk.android.player.Player;
-        import com.spotify.sdk.android.player.PlayerNotificationCallback;
-        import com.spotify.sdk.android.player.PlayerState;
-        import com.spotify.sdk.android.player.Spotify;
-import com.xeno.MusTrip.LazyAdapter;
-import com.xeno.MusTrip.MyApplication;
-import com.xeno.MusTrip.R;
-import com.xeno.MusTrip.Song;
-
+import com.android.volley.toolbox.ImageRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.spotify.sdk.android.authentication.AuthenticationClient;
+import com.spotify.sdk.android.authentication.AuthenticationRequest;
+import com.spotify.sdk.android.authentication.AuthenticationResponse;
+import com.spotify.sdk.android.player.Config;
+import com.spotify.sdk.android.player.ConnectionStateCallback;
+import com.spotify.sdk.android.player.Player;
+import com.spotify.sdk.android.player.PlayerNotificationCallback;
+import com.spotify.sdk.android.player.PlayerState;
+import com.spotify.sdk.android.player.Spotify;
 import org.json.JSONArray;
-        import org.json.JSONException;
-        import org.json.JSONObject;
-
-        import java.io.IOException;
-        import java.io.InputStream;
-        import java.io.UnsupportedEncodingException;
-        import java.net.HttpURLConnection;
-        import java.net.URL;
-        import java.net.URLEncoder;
-        import java.util.ArrayList;
-        import java.util.HashMap;
-        import java.util.List;
-        import java.util.Map;
-        import java.util.concurrent.Callable;
-
-        import kaaes.spotify.webapi.android.SpotifyApi;
-        import kaaes.spotify.webapi.android.SpotifyService;
-        import kaaes.spotify.webapi.android.models.Album;
-        import kaaes.spotify.webapi.android.models.Artist;
-        import kaaes.spotify.webapi.android.models.Track;
-        import retrofit.Callback;
-        import retrofit.RetrofitError;
+import org.json.JSONException;
+import org.json.JSONObject;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import kaaes.spotify.webapi.android.SpotifyApi;
+import kaaes.spotify.webapi.android.SpotifyService;
+import kaaes.spotify.webapi.android.models.Track;
+import retrofit.Callback;
+import retrofit.RetrofitError;
 
 /**
  * Created by mcarr on 11/1/2016.
@@ -151,6 +122,7 @@ public class CityFinder extends AppCompatActivity implements
         btnForward.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 mPlayer.skipToNext();
+                play.setBackgroundResource(R.drawable.pause);
 
             }
         });
@@ -165,6 +137,7 @@ public class CityFinder extends AppCompatActivity implements
                     songQueue.remove(0);
                 }
                 mPlayer.skipToPrevious();
+                play.setBackgroundResource(R.drawable.pause);
             }
         });
     }
@@ -374,8 +347,16 @@ public class CityFinder extends AppCompatActivity implements
     /* When user searches for a city  */
     public void onSearch(View view) throws Exception {
         /* Gives user information that process is currently running to retrieve playlists */
-        final ProgressDialog progress;
-        progress = ProgressDialog.show(this, "One moment", "Retrieving songs...", true);
+        final ProgressDialog progress = new ProgressDialog(this);
+        progress.setMessage("Retrieving Location");
+        progress.setProgress(0);
+        progress.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        progress.show();
         /* Get whichever city the user inputted */
         SearchView cityinput = (SearchView) findViewById(R.id.input);
         final String cityName = cityinput.getQuery().toString();

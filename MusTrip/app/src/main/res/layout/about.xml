@@ -1,51 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#FFFFFF"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Usage"
-        android:id="@+id/textView5"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="0.01"
-        android:layout_alignParentTop="true"
-        android:layout_alignLeft="@+id/textView7"
-        android:layout_alignStart="@+id/textView7"
-        android:layout_marginTop="33dp" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Modes"
-        android:id="@+id/textView7"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="0.06"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Usage"
+                android:id="@+id/textView5"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="0.01"
 
-    <TextView
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:text="@string/about"
-        android:id="@+id/textView6"
-        android:layout_below="@+id/textView5"
-        android:layout_centerHorizontal="true" />
+                 />
 
-    <TextView
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView8"
-        android:text="@string/modes"
-        android:layout_below="@+id/textView7"
-        android:layout_alignLeft="@+id/textView6"
-        android:layout_alignStart="@+id/textView6" />
+            <TextView
+                android:layout_width="338dp"
+                android:layout_height="wrap_content"
+                android:text="@string/about"
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/textView6"
 
-</RelativeLayout>
+                 />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Trip/Local Music Mode"
+                android:id="@+id/textView7"
+                android:layout_weight="0.06"
+                android:layout_gravity="center_horizontal"
+                 />
+
+            <TextView
+                android:layout_width="352dp"
+                android:layout_height="123dp"
+                android:id="@+id/textView8"
+                android:text="@string/modes"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_below="@+id/textView7"
+                android:layout_alignLeft="@+id/textView6"
+                android:layout_alignStart="@+id/textView6" />
+            <ImageView
+                android:layout_width="200dp"
+                android:layout_height="400dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_alignParentBottom="true"
+                android:background="@mipmap/about_local"
+                 />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Search by City Mode"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:id="@+id/textView3" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/musicFinder"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:id="@+id/textView4" />
+            <ImageView
+                android:layout_width="200dp"
+                android:layout_height="400dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_alignParentBottom="true"
+                android:background="@mipmap/about_search"
+                />
+
+        </LinearLayout>
+</ScrollView>
